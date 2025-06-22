@@ -33,5 +33,8 @@ out/
 /nbdist/
 /.nb-gradle/
 
+### Nuxt
+.nuxt/
+node_modules/
 ### VS Code ###
 .vscode/
