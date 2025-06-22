@@ -1,0 +1,34 @@
+services:
+    pgadmin:
+        image: dpage/pgadmin4:latest
+        container_name: pgadmin
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+            PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
+            PGADMIN_LISTEN_PORT: ${PGADMIN_PORT}
+        ports:
+            - "${PGADMIN_PORT}:${PGADMIN_PORT}"
+        networks:
+            project_net:
+                ipv4_address: ${PGADMIN_HOST}
+        # SpringBoot:
+        #     container_name: SpringBoot
+        #     build: context:../BE/SpringBoot
+        #     dockerfile: Dockerfile
+        #   evniroment:
+        #     - DB_HOST=${DB_HOST}
+        #     - DB_NAME=${DB_NAME}
+        #     - DB_USER=${DB_USER}
+        #     - DB_PASSWORD=${DB_PASSWORD}
+        #   volume:
+        #     - ../BE/SpringBoot
+
+networks:
+    project_net:
+        name: ${PROJECT_NAME}_net
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: ${DOCKER_NETWORK}
