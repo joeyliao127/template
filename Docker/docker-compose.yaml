@@ -1,0 +1,15 @@
+version: "3"
+
+services:
+    springboot:
+        container_name: nginx
+        build: context:../BE/spring-boot
+        dockerfile: Dockerfile
+      evniroment:
+        - DB_HOST=${DB_HOST}
+        - DB_NAME=${DB_NAME}
+        - DB_USER=${DB_USER}
+        - DB_PASSWORD=${DB_PASSWORD}
+      volume:
+        - ../BE/spring-boot
+      
