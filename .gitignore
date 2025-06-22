@@ -36,5 +36,6 @@ out/
 ### Nuxt
 .nuxt/
 node_modules/
+pnpm-lock.yaml
 ### VS Code ###
 .vscode/
