@@ -12,17 +12,18 @@ services:
         networks:
             project_net:
                 ipv4_address: ${PGADMIN_HOST}
-        # SpringBoot:
-        #     container_name: SpringBoot
-        #     build: context:../BE/SpringBoot
-        #     dockerfile: Dockerfile
-        #   evniroment:
-        #     - DB_HOST=${DB_HOST}
-        #     - DB_NAME=${DB_NAME}
-        #     - DB_USER=${DB_USER}
-        #     - DB_PASSWORD=${DB_PASSWORD}
-        #   volume:
-        #     - ../BE/SpringBoot
+    springboot:
+        container_name: springboot
+        build: context:../BE/SpringBoot
+        dockerfile: Dockerfile
+        evniroment:
+            - PG_HOST=${PG_HOST}
+            - PG_DB_NAME=${PG_DB_NAME}
+            # TODO: 這邊要抽到 env，username: postgre為測試用
+            - PG_USER=postgre
+            - DB_PASSWORD=${PG_PASSWORD}
+        volume:
+            - ../BE/SpringBoot
 
 networks:
     project_net:
