@@ -1,5 +1,5 @@
 <template>
-    <p>Sample Page</p>
+    <p class="text-2xl">Sample Page</p>
 </template>
 
 <script setup lang="ts"></script>

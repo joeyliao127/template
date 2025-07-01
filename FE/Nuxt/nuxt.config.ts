@@ -1,32 +1,37 @@
-import { defineNuxtConfig } from 'nuxt/config';
+import { defineNuxtConfig } from "nuxt/config";
+import tailwindcss from "@tailwindcss/vite";
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-	compatibilityDate: '2025-05-15',
-	runtimeConfig: {},
+    compatibilityDate: "2025-05-15",
+    runtimeConfig: {},
 
-	components: [
-		{
-			path: '~/components',
-			pathPrefix: false,
-		},
-	],
+    components: [
+        {
+            path: "~/components",
+            pathPrefix: false,
+        },
+    ],
 
-	css: ['~/assets/css/tailwind.css'],
+    css: ["~/assets/css/tailwind.css"],
 
-	typescript: {
-		strict: true,
-		typeCheck: 'build',
-	},
+    typescript: {
+        strict: true,
+        typeCheck: "build",
+    },
 
-	devtools: { enabled: false },
-	modules: ['@nuxtjs/i18n'],
+    devtools: { enabled: false },
+    modules: ["@nuxtjs/i18n"],
 
-	i18n: {
-		defaultLocale: 'zh',
-		locales: [
-			{ code: 'en', language: 'en-US' },
-			{ code: 'zh', language: 'zh-TW' },
-		],
-	},
+    i18n: {
+        defaultLocale: "zh",
+        locales: [
+            { code: "en", language: "en-US" },
+            { code: "zh", language: "zh-TW" },
+        ],
+    },
+
+    vite: {
+        plugins: [tailwindcss()],
+    },
 });
