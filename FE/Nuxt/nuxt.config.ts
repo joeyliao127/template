@@ -21,7 +21,7 @@ export default defineNuxtConfig({
     },
 
     devtools: { enabled: false },
-    modules: ["@nuxtjs/i18n"],
+    modules: ["@nuxtjs/i18n", "@nuxt/ui"],
 
     i18n: {
         defaultLocale: "zh",
