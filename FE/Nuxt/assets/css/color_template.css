@@ -1,0 +1,36 @@
+/*清爽型*/
+
+--primary: oklch(0.68 0.07 250); /* 柔和天空藍 */
+--secondary: oklch(0.94 0.01 260); /* 雲霧白 */
+--accent: oklch(0.84 0.05 180); /* 淡水藍 */
+--destructive: oklch(0.76 0.07 15); /* 柔和蜜桃 */
+
+/*專業型*/
+
+--primary: oklch(0.45 0.02 240); /* 專業深灰藍 */
+--secondary: oklch(0.88 0.02 220); /* 淡商務藍 */
+--accent: oklch(0.75 0.06 200); /* 信任藍 */
+--destructive: oklch(0.68 0.1 25); /* 專業橙紅 */
+
+--primary: oklch(0.4 0.01 180); /* 炭灰色 */
+--secondary: oklch(0.9 0.02 150); /* 淡科技綠 */
+--accent: oklch(0.78 0.05 160); /* 清淡綠 */
+--destructive: oklch(0.7 0.08 10); /* 柔和警示紅 */
+
+--primary: oklch(0.48 0.04 280); /* 深紫灰 */
+--secondary: oklch(0.89 0.02 290); /* 淡紫灰 */
+--accent: oklch(0.76 0.06 320); /* 專業紫 */
+--destructive: oklch(0.72 0.09 350); /* 柔和品紅 */
+
+/*高對比*/
+
+--primary: oklch(0.3 0.08 240); /* 深藍色 */
+--secondary: oklch(0.96 0.01 240); /* 純淨白 */
+--accent: oklch(0.85 0.06 50); /* 溫暖金 */
+--destructive: oklch(0.55 0.18 20); /* 深橙紅 */
+
+/*現代灰階*/
+--primary: oklch(0.35 0.01 240); /* 冷調深灰 */
+--secondary: oklch(0.95 0.005 220); /* 極淡冷白 */
+--accent: oklch(0.65 0.03 200); /* 冷調中灰 */
+--destructive: oklch(0.55 0.08 15); /* 低調紅灰 */

@@ -1,3 +1,32 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 @plugin "@tailwindcss/typography";
+
+@theme inline {
+    --color-primary: var(--primary);
+    --color-secondary: var(--secondary);
+    --color-accent: var(--accent);
+    --color-destructive: var(--destructive);
+}
+
+:root {
+    --height-header: 48px;
+    --height-footer: 32px;
+    --height-spacer: 28px;
+    --background: oklch(0.279 0.041 260.031);
+    --background: oklch(0.279 0.041 260.031);
+    --primary: oklch(0.828 0.189 84.429);
+    --accent: oklch(0.704 0.191 22.216);
+}
+
+.dark {
+    --background: oklch(0.279 0.041 260.031);
+    --primary: oklch(0.828 0.189 84.429);
+    --accent: oklch(0.704 0.191 22.216);
+}
+
+@layer base {
+    button {
+        @apply cursor-pointer;
+    }
+}
