@@ -6,7 +6,6 @@
     --color-primary: var(--primary);
     --color-secondary: var(--secondary);
     --color-accent: var(--accent);
-    --color-destructive: var(--destructive);
 }
 
 :root {
@@ -16,6 +15,7 @@
     --background: oklch(0.279 0.041 260.031);
     --background: oklch(0.279 0.041 260.031);
     --primary: oklch(0.828 0.189 84.429);
+    --secondary: oklch(0.704 0.191 22.216);
     --accent: oklch(0.704 0.191 22.216);
 }
 

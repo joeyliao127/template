@@ -29,9 +29,19 @@ export default defineNuxtConfig({
             { code: "en", language: "en-US" },
             { code: "zh", language: "zh-TW" },
         ],
+        bundle: {
+            optimizeTranslationDirective: false,
+        },
     },
 
     vite: {
         plugins: [tailwindcss()],
+    },
+
+    ui: {
+        theme: {
+            // tailwind 原本就支援 primary, secondary，若要套用 color 到 UButton，可以在此設定
+            colors: ["accent"],
+        },
     },
 });
