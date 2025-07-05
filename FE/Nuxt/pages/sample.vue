@@ -29,7 +29,7 @@
                 <UButton variant="link" label="link" color="accent" />
             </div>
         </div>
-
+        <UCarousel></UCarousel>
         <USeparator>
             <h2 class="title text-2xl">Charts and Cards</h2>
         </USeparator>
@@ -45,12 +45,28 @@
                 <Bar :data="chartData" :options="chartOptions" />
             </UCard>
         </div>
+
+        <USeparator>
+            <h2>Avatar</h2>
+        </USeparator>
+        <div class="px-4">
+            <UAvatar src="https://github.com/benjamincanac.png" />
+            <UAvatarGroup>
+                <UAvatar src="https://github.com/benjamincanac.png" />
+                <UAvatar src="https://github.com/benjamincanac.png" />
+                <UAvatar src="https://github.com/benjamincanac.png" />
+            </UAvatarGroup>
+        </div>
+
+        <USeparator>
+            <h2 class="title text-2xl">Sigin Form</h2>
+        </USeparator>
+        <FormSignIn />
     </div>
 </template>
 <script setup lang="ts">
 import { Bar } from "vue-chartjs";
 import { ref } from "vue";
-import { tr } from "@nuxt/ui/runtime/locale/index.js";
 
 const chartData = ref({
     labels: ["圖表一", "圖表二", "圖表三", "圖表四", "圖表五", "圖表六", "圖表七"],
