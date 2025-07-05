@@ -2,7 +2,6 @@
     <div class="p-8 space-y-6">
         <h1 class="text-3xl font-bold text-primary">Sample Color Test</h1>
 
-        <USeparator icon="lucide-pencil"></USeparator>
         <div class="space-x-4 flex flex-col gap-4">
             <h2 class="title text-2xl">Buttons</h2>
             <div class="flex gap-2">
@@ -10,9 +9,7 @@
                 <UButton class="bg-accent px-4 py-2 rounded hover:bg-accent/90">Accent</UButton>
             </div>
             <h3 class="title text-xl">Button with icon</h3>
-            <div class="flex gap-2">
-                <UButton icon="i-lucide-sun">accessibility</UButton>
-            </div>
+            <div class="flex gap-2"></div>
             <h3 class="title text-xl">Variants</h3>
             <div class="flex gap-2">
                 <UButton variant="solid" label="sloid" />
@@ -61,12 +58,15 @@
         <USeparator>
             <h2 class="title text-2xl">Sigin Form</h2>
         </USeparator>
-        <FormSignIn />
+
+        <FormSignTabs />
     </div>
 </template>
 <script setup lang="ts">
 import { Bar } from "vue-chartjs";
 import { ref } from "vue";
+import FormSignTabs from "~/components/FormSignTabs.vue";
+import FormSignUp from "~/components/FormSignUp.vue";
 
 const chartData = ref({
     labels: ["圖表一", "圖表二", "圖表三", "圖表四", "圖表五", "圖表六", "圖表七"],
