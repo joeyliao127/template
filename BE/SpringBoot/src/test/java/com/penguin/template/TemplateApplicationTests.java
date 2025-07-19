@@ -1,4 +1,4 @@
-package com.template.template;
+package com.penguin.template;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

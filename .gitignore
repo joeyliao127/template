@@ -46,5 +46,8 @@ pnpm-lock.yaml
 # env
 .env
 
-#DB
+# BE
+target/
+
+# DB
 Database/data/
