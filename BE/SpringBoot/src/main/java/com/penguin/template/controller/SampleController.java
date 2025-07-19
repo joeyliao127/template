@@ -1,0 +1,13 @@
+package com.penguin.template.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class SampleController {
+    @GetMapping("/")
+    public String index() {
+        System.out.println("test");
+        return "Hello World!";
+    }
+}
