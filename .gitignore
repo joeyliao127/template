@@ -41,7 +41,10 @@ pnpm-lock.yaml
 .vscode/
 
 ### MACOS
-.DS_Store
+**/.DS_Store
 
 # env
 .env
+
+#DB
+Database/data/
