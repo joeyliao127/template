@@ -36,6 +36,10 @@ export default defineNuxtConfig({
 
     vite: {
         plugins: [tailwindcss()],
+        server: {
+            // TODO: Domain 改為 project name
+            allowedHosts: ["nuxt", "template.local.com"],
+        },
     },
 
     ui: {
