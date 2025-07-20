@@ -36,7 +36,9 @@ out/
 ### Nuxt
 .nuxt/
 node_modules/
+.pnpm-store/
 pnpm-lock.yaml
+
 ### VS Code ###
 .vscode/
 
@@ -51,3 +53,6 @@ target/
 
 # DB
 Database/data/
+
+# temp
+BE/SpringBootOld/

@@ -33,7 +33,21 @@ services:
         networks:
             project_net:
                 ipv4_address: ${BACKEND_HOST}
-
+    nuxt:
+        container_name: nuxt
+        build:
+            context: ../FE
+            dockerfile: Dockerfile
+        ports:
+            - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+        volumes:
+            - ../FE/Nuxt:/app
+            # 匿名 volume，在本機的/var/lib/docker/volumes/<隨機字串>/_data中
+            # 避免 Mac 和 Linux npm平台問題
+            - /app/node_modules
+        networks:
+            project_net:
+                ipv4_address: ${FRONTEND_HOST}
 networks:
     project_net:
         name: ${PROJECT_NAME}_net
