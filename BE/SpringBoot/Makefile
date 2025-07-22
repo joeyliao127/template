@@ -13,7 +13,7 @@ up:
 	docker compose -f ../../Docker/docker-compose-app.yaml up -d springboot
 	@echo "✅ Docker container running."
 
-restart: build restart-docker
+re: build up
 
 restart-docker:
 	@echo "♻️ Restarting container with new JAR..."
