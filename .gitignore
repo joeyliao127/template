@@ -38,6 +38,7 @@ out/
 node_modules/
 .pnpm-store/
 pnpm-lock.yaml
+node-compile-cache
 
 ### VS Code ###
 .vscode/

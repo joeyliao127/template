@@ -1,6 +1,8 @@
 DROP DATABASE IF EXISTS sample;
 CREATE DATABASE sample;
 
+\c sample;
+
 -- 請確保你是在 Sample 資料庫下執行以下語法
 
 DROP SCHEMA IF EXISTS ec CASCADE;

@@ -1,4 +1,4 @@
-include .env
+include ../../Docker/.env
 
 JAR_NAME := target/$(PROJECT_NAME).jar
 .PHONY: build restart
