@@ -1,7 +1,7 @@
 <template>
     <div class="p-8 space-y-6">
         <h1 class="text-3xl font-bold text-primary">Sample Color Test</h1>
-
+        <UBlogPost title="Introducing Nuxt Icon v1" />
         <div class="space-x-4 flex flex-col gap-4">
             <h2 class="title text-2xl">Buttons</h2>
             <div class="flex gap-2">
