@@ -6,13 +6,6 @@ export default defineNuxtConfig({
     compatibilityDate: "2025-05-15",
     runtimeConfig: {},
 
-    components: [
-        {
-            path: "~/components",
-            pathPrefix: false,
-        },
-    ],
-
     css: ["~/assets/css/tailwind.css"],
 
     typescript: {
@@ -20,7 +13,7 @@ export default defineNuxtConfig({
         typeCheck: "build",
     },
 
-    devtools: { enabled: false },
+    devtools: { enabled: true },
     modules: ["@nuxtjs/i18n", "@nuxt/ui-pro"],
 
     i18n: {
@@ -39,6 +32,11 @@ export default defineNuxtConfig({
         server: {
             // TODO: Domain 改為 project name
             allowedHosts: ["nuxt", "template.local.com"],
+        },
+        hmr: {
+            protocol: "ws",
+            host: "template.local.com",
+            clientPort: 443, // 如果你沒用 HTTPS 可改成 80
         },
     },
 
