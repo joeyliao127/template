@@ -58,6 +58,7 @@ services:
         volumes:
             - "./nginx/conf.d:/etc/nginx/conf.d"
             - "./nginx/ssl:/etc/nginx/ssl"
+        # 需要指定服務名稱，不能指定容器名稱
         depends_on:
             - springboot
             - nuxt
