@@ -5,8 +5,13 @@
         <div class="space-x-4 flex flex-col gap-4">
             <h2 class="title text-2xl">Buttons</h2>
             <div class="flex gap-2">
-                <UButton class="bg-primary px-4 py-2 rounded hover:bg-primary/90">Primary</UButton>
-                <UButton class="bg-accent px-4 py-2 rounded hover:bg-accent/90">Accent</UButton>
+                <UButton
+                    class="bg-primary px-4 py-2 rounded hover:bg-primary/90">
+                    Primary
+                </UButton>
+                <UButton class="bg-accent px-4 py-2 rounded hover:bg-accent/90">
+                    Accent
+                </UButton>
             </div>
             <h3 class="title text-xl">Button with icon</h3>
             <div class="flex gap-2"></div>
@@ -60,16 +65,37 @@
         </USeparator>
 
         <FormSignTabs />
+
+        <div class="flex flex-col items-center justify-center gap-4 p-4">
+            <UPageCard class="w-full max-w-md">
+                <UAuthForm
+                    :schema="schema"
+                    title="Login"
+                    description="Enter your credentials to access your account."
+                    icon="i-lucide-user"
+                    :fields="fields"
+                    :providers="providers"
+                    @submit="onSubmit" />
+            </UPageCard>
+        </div>
     </div>
 </template>
 <script setup lang="ts">
 import { Bar } from "vue-chartjs";
 import { ref } from "vue";
-import FormSignTabs from "~/components/FormSignTabs.vue";
+// import FormSignTabs from "~/components/FormSignTabs.vue"; // Temporarily commented out due to TS plugin error
 import FormSignUp from "~/components/FormSignUp.vue";
 
 const chartData = ref({
-    labels: ["圖表一", "圖表二", "圖表三", "圖表四", "圖表五", "圖表六", "圖表七"],
+    labels: [
+        "圖表一",
+        "圖表二",
+        "圖表三",
+        "圖表四",
+        "圖表五",
+        "圖表六",
+        "圖表七",
+    ],
     datasets: [
         {
             label: "測試資料",
@@ -111,6 +137,60 @@ const chartOptions = ref({
         legend: { display: false },
     },
 });
+
+import { z } from "zod";
+import type { FormSubmitEvent } from "@nuxt/ui";
+
+const toast = useToast();
+
+const fields = [
+    {
+        name: "email",
+        type: "text" as const,
+        label: "Email",
+        placeholder: "Enter your email",
+        required: true,
+    },
+    {
+        name: "password",
+        label: "Password",
+        type: "password" as const,
+        placeholder: "Enter your password",
+    },
+    {
+        name: "remember",
+        label: "Remember me",
+        type: "checkbox" as const,
+    },
+];
+
+const providers = [
+    {
+        label: "Google",
+        icon: "i-simple-icons-google",
+        onClick: () => {
+            toast.add({ title: "Google", description: "Login with Google" });
+        },
+    },
+    {
+        label: "GitHub",
+        icon: "i-simple-icons-github",
+        onClick: () => {
+            toast.add({ title: "GitHub", description: "Login with GitHub" });
+        },
+    },
+];
+
+const schema = z.object({
+    email: z.string().email("Invalid email"),
+    password: z.string().min(8, "Must be at least 8 characters"),
+});
+
+type Schema = z.output<typeof schema>;
+
+function onSubmit(payload: FormSubmitEvent<Schema>) {
+    console.log("Submitted", payload);
+}
 </script>
 
 <style>
