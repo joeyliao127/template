@@ -1,0 +1,14 @@
+package __PACKAGE__.domain.__entity__;
+
+import lombok.Data;
+
+/**
+ * 查詢過濾條件（可為 null 代表不過濾）。
+ * Controller 由 Query String 綁定，Repository 以 null-guard SQL 套用。
+ */
+@Data
+public class __ENTITY__Condition {
+
+    // TODO: 對應 schema 補上要支援的過濾欄位（範例保留 name）
+    private String name;
+}

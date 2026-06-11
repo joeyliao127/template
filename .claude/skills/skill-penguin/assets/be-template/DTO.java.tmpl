@@ -1,0 +1,30 @@
+package __PACKAGE__.domain.__entity__;
+
+import java.time.Instant;
+import java.util.UUID;
+
+import __PACKAGE__.entity.__ENTITY__;
+
+import lombok.Builder;
+import lombok.Data;
+
+@Data
+@Builder
+public class __ENTITY__DTO {
+    private UUID id;
+
+    // TODO: 對應 entity / schema 補欄位（範例保留 name）
+    private String name;
+
+    private Instant createdAt;
+    private Instant updatedAt;
+
+    public static __ENTITY__DTO fromEntity(__ENTITY__ __entity__) {
+        return __ENTITY__DTO.builder()
+                .id(__entity__.getId())
+                .name(__entity__.getName())
+                .createdAt(__entity__.getCreatedAt())
+                .updatedAt(__entity__.getUpdatedAt())
+                .build();
+    }
+}

@@ -1,0 +1,22 @@
+package __PACKAGE__.service;
+
+import java.util.UUID;
+
+import __PACKAGE__.common.command.PageCommand;
+import __PACKAGE__.common.dto.PageResponse;
+import __PACKAGE__.domain.__entity__.__ENTITY__Condition;
+import __PACKAGE__.domain.__entity__.__ENTITY__CreateCommand;
+import __PACKAGE__.domain.__entity__.__ENTITY__DTO;
+import __PACKAGE__.domain.__entity__.__ENTITY__UpdateCommand;
+
+public interface __ENTITY__Service {
+    PageResponse<__ENTITY__DTO> index(__ENTITY__Condition condition, PageCommand page);
+
+    __ENTITY__DTO getById(UUID id);
+
+    __ENTITY__DTO create(__ENTITY__CreateCommand command);
+
+    __ENTITY__DTO update(UUID id, __ENTITY__UpdateCommand command);
+
+    void delete(UUID id);
+}

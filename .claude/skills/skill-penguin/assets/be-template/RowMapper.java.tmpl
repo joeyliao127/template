@@ -1,0 +1,33 @@
+package __PACKAGE__.repository.rowmapper;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.UUID;
+
+import org.springframework.jdbc.core.RowMapper;
+
+import __PACKAGE__.entity.__ENTITY__;
+
+public class __ENTITY__RowMapper implements RowMapper<__ENTITY__> {
+    @Override
+    public __ENTITY__ mapRow(ResultSet rs, int rowNum) throws SQLException {
+        __ENTITY__ __entity__ = new __ENTITY__();
+        __entity__.setId(rs.getObject("id", UUID.class));
+
+        // TODO: 對應 schema 補欄位（範例保留 name）
+        __entity__.setName(rs.getString("name"));
+
+        Timestamp createdAt = rs.getTimestamp("created_at");
+        if (createdAt != null) {
+            __entity__.setCreatedAt(createdAt.toInstant());
+        }
+
+        Timestamp updatedAt = rs.getTimestamp("updated_at");
+        if (updatedAt != null) {
+            __entity__.setUpdatedAt(updatedAt.toInstant());
+        }
+
+        return __entity__;
+    }
+}

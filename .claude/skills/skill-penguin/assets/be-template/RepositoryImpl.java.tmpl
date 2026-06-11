@@ -1,0 +1,113 @@
+package __PACKAGE__.repository.impl;
+
+import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
+
+import __PACKAGE__.domain.__entity__.__ENTITY__Condition;
+import __PACKAGE__.entity.__ENTITY__;
+import __PACKAGE__.repository.__ENTITY__Repository;
+import __PACKAGE__.repository.rowmapper.__ENTITY__RowMapper;
+
+@Repository
+public class __ENTITY__RepositoryImpl implements __ENTITY__Repository {
+
+    // TODO: 對應 schema 補欄位（範例保留 name）
+    private static final String BASE_SELECT = """
+        SELECT t.id, t.name, t.created_at, t.updated_at
+        FROM __resource__ t
+        """;
+
+    // 動態過濾一律用「整句靜態 SQL + null-guard」，不要字串拼接。
+    // 注意：PostgreSQL 對未定型的 NULL 參數無法推斷型別，故 IS NULL 那側要 CAST。
+    private static final String WHERE = """
+        WHERE (CAST(:name AS VARCHAR) IS NULL OR t.name = :name)
+        """;
+
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final __ENTITY__RowMapper rowMapper;
+
+    public __ENTITY__RepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.rowMapper = new __ENTITY__RowMapper();
+    }
+
+    @Override
+    public List<__ENTITY__> find(__ENTITY__Condition condition, int limit, int offset) {
+        String sql = BASE_SELECT + WHERE + " ORDER BY t.created_at DESC LIMIT :limit OFFSET :offset";
+        SqlParameterSource params = conditionParams(condition)
+            .addValue("limit", limit)
+            .addValue("offset", offset);
+        return jdbcTemplate.query(sql, params, rowMapper);
+    }
+
+    @Override
+    public int count(__ENTITY__Condition condition) {
+        String sql = "SELECT COUNT(*) FROM __resource__ t " + WHERE;
+        Integer total = jdbcTemplate.queryForObject(sql, conditionParams(condition), Integer.class);
+        return total == null ? 0 : total;
+    }
+
+    @Override
+    public Optional<__ENTITY__> get(UUID id) {
+        String sql = BASE_SELECT + " WHERE t.id = :id";
+        List<__ENTITY__> result = jdbcTemplate.query(sql, new MapSqlParameterSource("id", id), rowMapper);
+        return result.isEmpty() ? Optional.empty() : Optional.of(result.get(0));
+    }
+
+    @Override
+    public __ENTITY__ create(__ENTITY__ __entity__) {
+        // TODO: 對應 schema 補欄位（範例保留 name）
+        String sql = """
+            INSERT INTO __resource__ (id, name, created_at, updated_at)
+            VALUES (:id, :name, :createdAt, :updatedAt)
+            RETURNING id, name, created_at, updated_at
+            """;
+        SqlParameterSource params = new MapSqlParameterSource()
+            .addValue("id", __entity__.getId())
+            .addValue("name", __entity__.getName())
+            .addValue("createdAt", toTimestamp(__entity__.getCreatedAt()))
+            .addValue("updatedAt", toTimestamp(__entity__.getUpdatedAt()));
+        return jdbcTemplate.queryForObject(sql, params, rowMapper);
+    }
+
+    @Override
+    public __ENTITY__ update(__ENTITY__ __entity__) {
+        // TODO: 對應 schema 補欄位（範例保留 name）
+        String sql = """
+            UPDATE __resource__
+            SET name = :name,
+                updated_at = :updatedAt
+            WHERE id = :id
+            RETURNING id, name, created_at, updated_at
+            """;
+        SqlParameterSource params = new MapSqlParameterSource()
+            .addValue("id", __entity__.getId())
+            .addValue("name", __entity__.getName())
+            .addValue("updatedAt", toTimestamp(__entity__.getUpdatedAt()));
+        return jdbcTemplate.queryForObject(sql, params, rowMapper);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        String sql = "DELETE FROM __resource__ WHERE id = :id";
+        jdbcTemplate.update(sql, new MapSqlParameterSource("id", id));
+    }
+
+    // TODO: 對應 schema / __ENTITY__Condition 補上其餘過濾欄位
+    private MapSqlParameterSource conditionParams(__ENTITY__Condition condition) {
+        return new MapSqlParameterSource()
+            .addValue("name", condition == null ? null : condition.getName());
+    }
+
+    private Timestamp toTimestamp(Instant instant) {
+        return instant == null ? null : Timestamp.from(instant);
+    }
+}

@@ -1,0 +1,12 @@
+package __PACKAGE__.domain.__entity__;
+
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
+
+@Data
+public class __ENTITY__CreateCommand {
+
+    // TODO: 對應 schema 補上建立時必填欄位（範例保留 name）
+    @NotEmpty
+    private String name;
+}

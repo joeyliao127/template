@@ -1,0 +1,22 @@
+package __PACKAGE__.entity;
+
+import java.time.Instant;
+import java.util.UUID;
+
+import lombok.Data;
+
+@Data
+public class __ENTITY__ {
+
+    private UUID id;
+
+    // TODO: 對應 Database/schema.sql 的 __resource__ 欄位，補上其餘屬性（範例保留 name）
+    private String name;
+
+    private Instant createdAt;
+
+    private Instant updatedAt;
+
+    public __ENTITY__() {}
+
+}

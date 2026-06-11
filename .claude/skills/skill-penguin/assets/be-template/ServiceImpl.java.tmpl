@@ -1,0 +1,88 @@
+package __PACKAGE__.service.impl;
+
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import __PACKAGE__.common.command.PageCommand;
+import __PACKAGE__.common.dto.PageResponse;
+import __PACKAGE__.domain.__entity__.__ENTITY__Condition;
+import __PACKAGE__.domain.__entity__.__ENTITY__CreateCommand;
+import __PACKAGE__.domain.__entity__.__ENTITY__DTO;
+import __PACKAGE__.domain.__entity__.__ENTITY__UpdateCommand;
+import __PACKAGE__.domain.__entity__.exception.__ENTITY__NotFoundException;
+import __PACKAGE__.entity.__ENTITY__;
+import __PACKAGE__.repository.__ENTITY__Repository;
+import __PACKAGE__.service.__ENTITY__Service;
+
+@Service
+public class __ENTITY__ServiceImpl implements __ENTITY__Service {
+
+    private static final int DEFAULT_PAGE_SIZE = 20;
+
+    private final __ENTITY__Repository __entity__Repository;
+
+    public __ENTITY__ServiceImpl(__ENTITY__Repository __entity__Repository) {
+        this.__entity__Repository = __entity__Repository;
+    }
+
+    @Override
+    public PageResponse<__ENTITY__DTO> index(__ENTITY__Condition condition, PageCommand page) {
+        int pageSize = (page == null || page.getPageSize() == null || page.getPageSize() <= 0)
+            ? DEFAULT_PAGE_SIZE : page.getPageSize();
+        int currentPage = (page == null || page.getPage() == null || page.getPage() <= 0)
+            ? 1 : page.getPage();
+        int offset = (currentPage - 1) * pageSize;
+
+        int count = __entity__Repository.count(condition);
+        List<__ENTITY__DTO> items = __entity__Repository.find(condition, pageSize, offset)
+            .stream()
+            .map(__ENTITY__DTO::fromEntity)
+            .toList();
+
+        PageResponse<__ENTITY__DTO> response = new PageResponse<>();
+        response.setCount(count);
+        response.setCurrentPage(currentPage);
+        response.setPageSize(pageSize);
+        response.setTotalPage((int) Math.ceil((double) count / pageSize));
+        response.setItems(items);
+        return response;
+    }
+
+    @Override
+    public __ENTITY__DTO getById(UUID id) {
+        return __entity__Repository.get(id)
+            .map(__ENTITY__DTO::fromEntity)
+            .orElseThrow(() -> new __ENTITY__NotFoundException("__ENTITY__ not found"));
+    }
+
+    @Override
+    public __ENTITY__DTO create(__ENTITY__CreateCommand command) {
+        __ENTITY__ __entity__ = new __ENTITY__();
+        __entity__.setId(UUID.randomUUID());
+        // TODO: 對應 schema 設定其餘欄位（範例保留 name）
+        __entity__.setName(command.getName());
+        __entity__.setCreatedAt(Instant.now());
+        __entity__.setUpdatedAt(Instant.now());
+        return __ENTITY__DTO.fromEntity(__entity__Repository.create(__entity__));
+    }
+
+    @Override
+    public __ENTITY__DTO update(UUID id, __ENTITY__UpdateCommand command) {
+        __ENTITY__ __entity__ = __entity__Repository.get(id)
+            .orElseThrow(() -> new __ENTITY__NotFoundException("__ENTITY__ not found"));
+        // TODO: 對應 schema 設定其餘可更新欄位（範例保留 name）
+        __entity__.setName(command.getName());
+        __entity__.setUpdatedAt(Instant.now());
+        return __ENTITY__DTO.fromEntity(__entity__Repository.update(__entity__));
+    }
+
+    @Override
+    public void delete(UUID id) {
+        __entity__Repository.get(id)
+            .orElseThrow(() -> new __ENTITY__NotFoundException("__ENTITY__ not found"));
+        __entity__Repository.delete(id);
+    }
+}
