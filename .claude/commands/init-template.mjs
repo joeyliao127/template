@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-// init-template：把此 template 初始化為新專案。
+// init-template：以此 template 為藍本，在「template 同一層」複製出一個新專案資料夾，
+// 並於該副本上完成初始化。原 template 保持不變。
 // 用法：node .claude/commands/init-template.mjs <ProjectName> <description...>
-//   - <ProjectName> 為品牌顯示名（可含大寫），會自動推導小寫 slug
+//   - <ProjectName> 為品牌顯示名（可含大寫），會自動推導小寫 slug，並作為新資料夾名
 //   - 其餘參數視為專案描述（用於 README）
 
 import fs from 'node:fs'
@@ -17,10 +18,10 @@ const display = (argv[0] || '').trim()
 const description = argv.slice(1).join(' ').trim()
 if (!display) die('用法：node .claude/commands/init-template.mjs <ProjectName> <description>')
 
-const root = process.cwd()
-// 1) 確認在專案根目錄
+const src = process.cwd()
+// 1) 確認在 template 專案根目錄
 for (const f of ['Docker/.template.env', 'BE/SpringBoot/pom.xml', 'FE/Nuxt/nuxt.config.ts']) {
-    if (!fs.existsSync(path.join(root, f))) die(`請在專案根目錄執行（找不到 ${f}）`)
+    if (!fs.existsSync(path.join(src, f))) die(`請在 template 專案根目錄執行（找不到 ${f}）`)
 }
 
 // 2) 推導並驗證 slug（machine 用：Docker Compose 專案名、GHCR repo、PG、域名…皆須全小寫）
@@ -38,7 +39,32 @@ const appClass = `${pascal}Application`
 
 console.log(`${CYAN}init-template${R}  display=${display}  slug=${slug}  class=${appClass}`)
 
-// 3) Java package 改名（檔案系統搬移）：com.penguin.template → com.penguin.<slug>
+// 3) 複製到 template 同一層的新資料夾（root = 副本；原 template 不動）
+const parent = path.dirname(src)
+const root = path.join(parent, slug)
+if (path.resolve(root) === path.resolve(src)) die('新專案資料夾不可與 template 相同')
+if (fs.existsSync(root)) die(`目標資料夾已存在：${root}（請改名或先移除）`)
+
+// 複製時排除版控、相依、建置產物與本機檔（新專案會自行重建）
+const SKIP_SEG = new Set(['.git', 'node_modules', '.nuxt', '.output', 'target', 'dist', '.idea', '.DS_Store'])
+const SKIP_REL = new Set(['Docker/.env'])
+const copyFilter = (s) => {
+    const rel = path.relative(src, s)
+    if (!rel) return true
+    const segs = rel.split(path.sep)
+    if (segs.some((seg) => SKIP_SEG.has(seg))) return false
+    const relPosix = segs.join('/')
+    if (SKIP_REL.has(relPosix)) return false
+    if (relPosix === 'Database/data' || relPosix.startsWith('Database/data/')) return false
+    return true
+}
+fs.cpSync(src, root, { recursive: true, filter: copyFilter })
+ok(`已複製 template → ${path.relative(parent, root) || root}/`)
+
+// 新專案不需攜帶 init-template 指令本身（用完即焚）
+fs.rmSync(path.join(root, '.claude', 'commands'), { recursive: true, force: true })
+
+// 4) Java package 改名（檔案系統搬移）：com.penguin.template → com.penguin.<slug>
 const moveDir = (base) => {
     const from = path.join(root, base, 'template')
     const to = path.join(root, base, slug)
@@ -56,10 +82,9 @@ moveFile(path.join(root, beMain, slug), 'TemplateApplication.java', `${appClass}
 moveFile(path.join(root, beTest, slug), 'TemplateApplicationTests.java', `${appClass}Tests.java`)
 ok(`Java package 改名 → com.penguin.${slug}（主類 ${appClass}）`)
 
-// 4) 全專案文字替換（含原始碼、設定、文件範例路徑）
+// 5) 全專案文字替換（含原始碼、設定、文件範例路徑）
 const EXCLUDE_DIRS = new Set(['.git', 'node_modules', '.nuxt', 'target', 'dist', '.output', '.idea'])
 const BIN_EXT = new Set(['.png', '.jpg', '.jpeg', '.gif', '.ico', '.webp', '.pem', '.woff', '.woff2', '.ttf', '.eot', '.pdf', '.lock'])
-const SELF_DIR = path.join('.claude', 'commands') // 避免改到自己這支腳本
 const rules = [
     [/__PROJECT_DISPLAY__/g, display],
     [/__PROJECT_NAME__/g, slug],
@@ -71,9 +96,8 @@ let changed = 0
 const walk = (dir) => {
     for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
         const fp = path.join(dir, ent.name)
-        const rel = path.relative(root, fp)
         if (ent.isDirectory()) {
-            if (EXCLUDE_DIRS.has(ent.name) || rel === SELF_DIR) continue
+            if (EXCLUDE_DIRS.has(ent.name)) continue
             walk(fp)
         } else if (ent.isFile()) {
             if (BIN_EXT.has(path.extname(ent.name).toLowerCase())) continue
@@ -89,14 +113,14 @@ const walk = (dir) => {
 walk(root)
 ok(`替換佔位符與 package 參照（${changed} 個檔案）`)
 
-// 5) pom.xml artifactId / name
+// 6) pom.xml artifactId / name
 const pom = path.join(root, 'BE/SpringBoot/pom.xml')
 fs.writeFileSync(pom, fs.readFileSync(pom, 'utf8')
     .replace('<artifactId>template</artifactId>', `<artifactId>${slug}</artifactId>`)
     .replace('<name>template</name>', `<name>${slug}</name>`))
 ok(`pom.xml → ${slug}`)
 
-// 6) 產生專案 README
+// 7) 產生專案 README
 const readme = `# ${display}
 
 ${description || 'TODO: 補上專案描述'}
@@ -137,7 +161,7 @@ docker-compose -f docker-compose-app.yaml up -d
 fs.writeFileSync(path.join(root, 'README.md'), readme)
 ok('產生 README.md')
 
-// 7) 建立 Docker/.env 並產生新的 JWT_SECRET（startup.sh 開箱即用）
+// 8) 建立 Docker/.env 並產生新的 JWT_SECRET（startup.sh 開箱即用）
 const envTemplate = path.join(root, 'Docker/.template.env')
 const envFile = path.join(root, 'Docker/.env')
 if (fs.existsSync(envTemplate) && !fs.existsSync(envFile)) {
@@ -145,24 +169,13 @@ if (fs.existsSync(envTemplate) && !fs.existsSync(envFile)) {
     const env = fs.readFileSync(envTemplate, 'utf8').replace(/^JWT_SECRET=.*$/m, `JWT_SECRET=${secret}`)
     fs.writeFileSync(envFile, env)
     ok('建立 Docker/.env 並產生新的 JWT_SECRET')
-} else if (fs.existsSync(envFile)) {
-    ok('Docker/.env 已存在，略過（保留你的設定）')
 }
 
-// 8) 移除 template 專用檔（新專案不需要）：TEMPLATE.md + 此 init-template 指令
-const removeIfExists = (rel) => {
-    const fp = path.join(root, rel)
-    if (fs.existsSync(fp)) { fs.rmSync(fp, { recursive: true, force: true }); ok(`移除 ${rel}`) }
-}
-removeIfExists('TEMPLATE.md')
-removeIfExists('.claude/commands/init-template.md')
-removeIfExists('.claude/commands/init-template.mjs')
-// 若 commands 目錄已空則一併移除
-try {
-    const cmdDir = path.join(root, '.claude', 'commands')
-    if (fs.existsSync(cmdDir) && fs.readdirSync(cmdDir).length === 0) fs.rmdirSync(cmdDir)
-} catch { /* ignore */ }
+// 9) 移除新專案不需要的 template 專用檔（init-template 指令已於步驟 3 移除）
+const templateMd = path.join(root, 'TEMPLATE.md')
+if (fs.existsSync(templateMd)) { fs.rmSync(templateMd, { force: true }); ok('移除 TEMPLATE.md') }
 
 console.log(`\n${GREEN}完成${R}：${display} ${DIM}(slug: ${slug})${R}`)
-console.log(`${DIM}已建立 Docker/.env（含新 JWT_SECRET）。接著可：cd Docker && sh startup.sh${R}`)
-console.log(`${DIM}提醒：首次 pnpm install 會重新產生 lockfile；可 git init 重新建立版控。${R}`)
+console.log(`${DIM}新專案位於：${root}${R}`)
+console.log(`${DIM}原 template 未變動。接著可：cd ${path.join('..', slug)} && cd Docker && sh startup.sh${R}`)
+console.log(`${DIM}提醒：首次 pnpm install 會重新產生 lockfile；可在新資料夾 git init 重新建立版控。${R}`)
