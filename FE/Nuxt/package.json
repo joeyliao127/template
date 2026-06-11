@@ -1,0 +1,46 @@
+{
+    "name": "nuxt-app",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build_production": "export ENV=production && nuxt build",
+        "build_testing": "export ENV=testing && nuxt build",
+        "build_staging": "export ENV=staging && nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "cleanup": "nuxt clenaup",
+        "openapi:types": "openapi-typescript http://springboot:${BACKEND_PORT:-8080}/v3/api-docs --output types/api.d.ts",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix"
+    },
+    "dependencies": {
+        "@iconify-json/uil": "^1.2.3",
+        "@nuxt/ui": "4.8.2",
+        "@tailwindcss/vite": "4.3.0",
+        "dayjs": "1.11.21",
+        "ioredis": "^5.8.2",
+        "nuxt": "4.4.8",
+        "nuxt-lucide-icons": "2.1.0",
+        "tailwindcss": "4.3.0",
+        "unstorage": "1.17.3",
+        "vue": "3.5.35",
+        "vue-router": "4.6.4",
+        "yaml": "2.9.0",
+        "zod": "4.4.3"
+    },
+    "packageManager": "pnpm@11.5.2+sha512.71c631e382066efc25625d5cf029075de07b61b37f6e27350fbd84b1bda5864c8c1967adc280776b45c30a715c0359a3be08fef42d5bb09e2b99029979692916",
+    "devDependencies": {
+        "@nuxt/devtools": "2.5.0",
+        "@nuxt/eslint": "^1.15.2",
+        "@nuxtjs/i18n": "10.4.0",
+        "@sidebase/nuxt-auth": "^1.1.1",
+        "@tailwindcss/typography": "0.5.20",
+        "eslint": "^10.2.0",
+        "inquirer": "^13.1.0",
+        "openapi-typescript": "^6.7.6",
+        "typescript": "6.0.3",
+        "vue-tsc": "3.3.4"
+    }
+}

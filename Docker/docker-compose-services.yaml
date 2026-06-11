@@ -1,0 +1,32 @@
+services:
+    redis:
+        container_name: ${PROJECT_NAME}_redis
+        image: redis:8.6.4-alpine3.23
+        ports:
+            - "${REDIS_PORT}:${REDIS_PORT}"
+        networks:
+            - project_net
+
+    pg:
+        container_name: ${PROJECT_NAME}_pg
+        image: postgres:17.10-bookworm
+        ports:
+            - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+        shm_size: ${POSTGRES_SHM_SIZE}mb
+        environment:
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_DB: ${POSTGRES_DB}
+        volumes:
+            - ../Database/data:/var/lib/postgresql/data
+            - ../Database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+            - ../Database/data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
+        networks:
+            - project_net
+
+# 不指定 subnet / 靜態 IP：容器之間以服務名（pg、redis）互連，
+# 由 Docker 自動分配網段，避免多專案並存時 subnet 衝突。
+networks:
+    project_net:
+        name: ${PROJECT_NAME}_net
+        driver: bridge

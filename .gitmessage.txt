@@ -1,0 +1,42 @@
+Feat:
+
+# commit log 請遵造以下格式，並注意冒號後面有一個空格
+# 
+# <type>: <subject> {必要}
+# 
+# <body> {非必要}
+# 
+# <footer> {非必要}
+# 
+# 範例
+# feat: implementation login api function
+#
+# finished login module and integration with server login api
+#
+# Closes OR-xxxx 
+
+# <type>
+# 請遵守下列標籤
+# Feat: 新功能
+# Fix: Bug修復
+# Setup: 新增或修改設定檔
+# Docs: 文檔改變
+# Style: 代碼格式改變
+# Refactor: 功能重構
+# Perf: 性能優化
+# Test: 增加測試代碼
+# Build: 改變build工具
+# CI: 與ci相關的設定
+# Add: 增加一些跟功能無關的檔案
+# 3rd: 增加第三方
+# 
+# <Subject>
+# 用來簡要描述影響本次變動，概述即可
+# 
+# <Body>
+# 具體的修改訊息，越詳細越好
+# 
+# <Footer>
+# 如果是要關閉特定 Issue 或 Bug. 可以使用 Closes PROJECT-1 or Resolves PROJECT-1 or Fixes PROJECT-1 
+
+# commit template 參考來源：https://medium.com/dev-chill/%E4%BD%BF%E7%94%A8-git-commit-template-%E7%AE%A1%E7%90%86-git-log-cb70f95fda2f

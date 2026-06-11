@@ -1,0 +1,211 @@
+@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap");
+@import "tailwindcss";
+@import "@nuxt/ui";
+@plugin "@tailwindcss/typography";
+
+@theme inline {
+    /* Core palette → UButton / UBadge color props */
+    --color-primary: var(--primary);
+    --color-primary-dark: var(--primary-dark);
+    --color-secondary: var(--secondary);
+    --color-accent: var(--accent);
+    --color-alert: var(--alert);
+    --color-dialog-bg: var(--dialog-bg);
+
+    /* Semantic text colors → text-content / text-content-dim / … */
+    --color-content: var(--text-primary);
+    --color-content-dim: var(--text-secondary);
+    --color-content-muted: var(--text-body);
+    --color-content-faint: var(--text-muted);
+
+    /* Semantic surface colors → bg-surface-hover / hover:bg-surface-hover */
+    --color-surface-hover: var(--surface-hover);
+
+    --radius: var(--ui-radius);
+}
+
+/* ── Dark mode (default) ─────────────────────────────── */
+:root,
+.dark {
+    /* Base palette */
+    --background: rgba(31, 34, 31, 1);
+    --primary: rgba(12, 80, 19, 1);
+    --primary-dark: rgba(7, 42, 11, 1);
+    --primary-light: rgba(74, 222, 128, 1);
+    --secondary: oklch(0.9491 0 0);
+    --accent: rgba(184, 167, 109, 1);
+    --accent-dark: rgba(184, 167, 109, 1);
+    --alert: rgba(227, 6, 6, 1);
+    --dialog-bg: rgba(54, 54, 54, 1);
+
+    /* Text */
+    --text-primary: rgba(241, 245, 249, 1);      /* headings */
+    --text-secondary: rgba(226, 232, 240, 0.9);  /* sub-headings, sidebar */
+    --text-body: rgba(203, 213, 225, 0.65);      /* nav items, body */
+    --text-muted: rgba(148, 163, 184, 0.35);     /* placeholders, empty states */
+
+    /* Border */
+    --border-subtle: rgba(71, 85, 105, 1);
+
+    /* Surface */
+    --surface-code: rgba(51, 65, 85, 1);
+    --surface-code-bg: rgba(15, 23, 42, 1);
+    --surface-hover: rgba(255, 255, 255, 0.06);
+    --bg-overlay: rgba(0, 0, 0, 0.3);
+
+    /* Editor */
+    --editor-code: rgba(125, 211, 252, 1);
+    --editor-link: rgba(56, 189, 248, 1);
+
+    /* Auth */
+    --auth-text: rgba(248, 250, 252, 0.92);
+    --auth-text-strong: rgba(248, 250, 252, 1);
+    --auth-text-subtle: rgba(226, 232, 240, 0.7);
+    --auth-input-bg: rgba(30, 38, 60, 0.72);
+    --auth-input-border: rgba(255, 255, 255, 0.35);
+    --auth-input-border-focus: rgba(255, 255, 255, 0.7);
+    --auth-border: rgba(255, 255, 255, 0.12);
+    --auth-surface-strong: rgba(30, 38, 60, 0.72);
+    --auth-button-text: rgba(22, 24, 29, 1);
+
+    /* Shadow */
+    --shadow-dark: rgba(0, 0, 0, 0.2);
+    --shadow-base: rgba(15, 23, 42, 0.5);
+    --shadow-strong: rgba(15, 23, 42, 0.6);
+
+    /* Glass */
+    --glass-bg-subtle: rgba(31, 34, 31, 0.5);
+    --glass-bg: rgba(31, 34, 31, 0.72);
+    --glass-bg-strong: rgba(31, 34, 31, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.08);
+
+    /* Scrollbar */
+    --scrollbar-thumb: oklch(0.42 0.03 260);
+    --scrollbar-thumb-hover: oklch(0.52 0.03 260);
+
+    --ui-radius: 0.3125rem;
+}
+
+/* ── Light mode ──────────────────────────────────────── */
+/* 點綴：#C88395  主要：#C5DDE6  輔助/背景：#F7F5F2    */
+.light {
+    /* Base palette */
+    --background: #f7f5f2;
+    --primary: #c5dde6;
+    --primary-dark: rgba(159, 196, 209, 1);
+    --primary-light: rgba(197, 221, 230, 0.7);
+    --secondary: #f7f5f2;
+    --accent: #c88395;
+    --accent-dark: rgba(180, 108, 128, 1);
+    --alert: rgba(220, 38, 38, 1);
+    --dialog-bg: rgba(241, 239, 236, 1);
+
+    /* Text */
+    --text-primary: rgba(15, 23, 42, 1);
+    --text-secondary: rgba(30, 41, 59, 0.9);
+    --text-body: rgba(51, 65, 85, 0.75);
+    --text-muted: rgba(100, 116, 139, 0.45);
+
+    /* Border */
+    --border-subtle: rgba(148, 163, 184, 1);
+
+    /* Surface */
+    --surface-code: rgba(203, 213, 225, 1);
+    --surface-code-bg: rgba(248, 250, 252, 1);
+    --surface-hover: rgba(0, 0, 0, 0.05);
+    --bg-overlay: rgba(255, 255, 255, 0.45);
+
+    /* Editor */
+    --editor-code: rgba(6, 95, 140, 1);
+    --editor-link: rgba(2, 132, 199, 1);
+
+    /* Auth — auth page has its own dark background, keep dark */
+    --auth-text: rgba(248, 250, 252, 0.92);
+    --auth-text-strong: rgba(248, 250, 252, 1);
+    --auth-text-subtle: rgba(226, 232, 240, 0.7);
+    --auth-input-bg: rgba(30, 38, 60, 0.72);
+    --auth-input-border: rgba(255, 255, 255, 0.35);
+    --auth-input-border-focus: rgba(255, 255, 255, 0.7);
+    --auth-border: rgba(255, 255, 255, 0.12);
+    --auth-surface-strong: rgba(30, 38, 60, 0.72);
+    --auth-button-text: rgba(22, 24, 29, 1);
+
+    /* Shadow */
+    --shadow-dark: rgba(0, 0, 0, 0.08);
+    --shadow-base: rgba(0, 0, 0, 0.12);
+    --shadow-strong: rgba(0, 0, 0, 0.2);
+
+    /* Glass — based on #F7F5F2 = rgb(247, 245, 242) */
+    --glass-bg-subtle: rgba(247, 245, 242, 0.55);
+    --glass-bg: rgba(247, 245, 242, 0.78);
+    --glass-bg-strong: rgba(247, 245, 242, 0.92);
+    --glass-border: rgba(0, 0, 0, 0.1);
+
+    /* Scrollbar */
+    --scrollbar-thumb: oklch(0.68 0.04 240);
+    --scrollbar-thumb-hover: oklch(0.58 0.04 240);
+
+    --ui-radius: 0.3125rem;
+}
+
+/* ── Glass utilities ─────────────────────────────────── */
+@utility glass-subtle {
+    background: var(--glass-bg-subtle);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--glass-border);
+}
+
+@utility glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+}
+
+@utility glass-strong {
+    background: var(--glass-bg-strong);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+}
+
+@layer base {
+    html,
+    body {
+        font-family: "Kanit", sans-serif;
+        background-color: var(--background);
+    }
+
+    button {
+        @apply cursor-pointer;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+        border-radius: 0;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover);
+    }
+
+    ::-webkit-scrollbar-corner {
+        background: transparent;
+    }
+
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: var(--scrollbar-thumb) transparent;
+    }
+}

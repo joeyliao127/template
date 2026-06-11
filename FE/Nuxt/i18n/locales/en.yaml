@@ -1,0 +1,84 @@
+zh: 繁體中文
+en: English
+
+common:
+    save: Save
+    cancel: Cancel
+    delete: Delete
+    confirm: Confirm
+    create: Create
+    edit: Edit
+    search: Search
+    loadMore: Load more
+    noMore: No more
+    signOut: Sign out
+    saving: Saving...
+    saved: Saved ✓
+    retryLater: Please try again later
+    back: Back
+    send: Send
+    view: View
+
+nav:
+    overview: Overview
+    profile: Profile
+    security: Security
+    settings: Settings
+    notification: Notifications
+    language: Language
+    theme: Theme
+    account: Account
+    settingsPlaceholder: Settings form content will be injected here.
+    welcomeTo: Welcome to
+
+pages:
+    index:
+        breadcrumb: Overview
+        greeting: Good morning, welcome back
+        recentNotesDesc: Welcome to your dashboard
+
+    signIn:
+        tagline: Collaborate with partners
+        buildBrain: Build your second brain
+        withCode: with
+        method: Method.
+        signInTitle: Sign In
+        signUpTitle: Sign Up
+        email: Email
+        password: Password
+        username: Username
+        confirmPassword: Confirm Your Password
+        signInBtn: Sign In
+        signUpBtn: Sign Up
+        noAccount: "Don't have an account? Click"
+        register: Register
+        backTo: Back to
+        signinLink: Sign in
+        passwordMismatch: Passwords do not match
+        signUpFailed: Registration failed, please try again
+
+settings:
+    profile:
+        username: Username
+        email: Email
+        emailReadonly: Email cannot be changed
+        saveSuccess: Profile updated successfully
+        saveFailed: Update failed, please try again
+    security:
+        currentPassword: Current password
+        newPassword: New password
+        confirmPassword: Confirm new password
+        passwordMismatch: Passwords do not match
+        wrongPassword: Current password is incorrect
+        saveSuccess: Password updated successfully
+        saveFailed: Update failed, please try again
+    language:
+        description: Select interface language
+    theme:
+        description: Choose your preferred appearance
+        dark: Dark
+        light: Light
+    account:
+        deleteTitle: Delete Account
+        deleteWarning: This action cannot be undone. All your data will be permanently deleted.
+        deleteConfirmBtn: Confirm Delete

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>__PROJECT_DISPLAY__ — Template 架構說明</title>
+<style>
+    :root {
+        --bg: #0f1115;
+        --surface: #171a21;
+        --surface-2: #1e222b;
+        --border: #2a2f3a;
+        --text: #e6e8ec;
+        --muted: #9aa3b2;
+        --primary: #6aa3ff;
+        --accent: #f0a35e;
+        --green: #5fd0a0;
+        --radius: 12px;
+        --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Microsoft JhengHei", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.7;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px 80px; }
+    header.hero {
+        padding: 64px 24px 48px;
+        text-align: center;
+        background: radial-gradient(1200px 400px at 50% -10%, rgba(106,163,255,0.18), transparent 70%);
+        border-bottom: 1px solid var(--border);
+    }
+    header.hero h1 { font-size: 2.4rem; margin: 0 0 8px; letter-spacing: -0.5px; }
+    header.hero p { color: var(--muted); margin: 0 auto; max-width: 640px; font-size: 1.05rem; }
+    .tag {
+        display: inline-block; margin: 16px 4px 0; padding: 4px 12px;
+        background: var(--surface-2); border: 1px solid var(--border);
+        border-radius: 999px; font-size: 0.82rem; color: var(--muted);
+    }
+    h2 {
+        font-size: 1.4rem; margin: 56px 0 4px; padding-top: 8px;
+        display: flex; align-items: center; gap: 10px;
+    }
+    h2 .num {
+        font-family: var(--mono); font-size: 0.8rem; color: var(--bg);
+        background: var(--primary); width: 26px; height: 26px; border-radius: 7px;
+        display: inline-flex; align-items: center; justify-content: center; flex: none;
+    }
+    .lead { color: var(--muted); margin: 0 0 24px; }
+    .card {
+        background: var(--surface); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 22px 24px; margin: 18px 0;
+    }
+    code { font-family: var(--mono); background: var(--surface-2); padding: 1px 6px; border-radius: 5px; font-size: 0.9em; }
+
+    /* ── horizontal flow ── */
+    .flow { display: flex; align-items: stretch; flex-wrap: wrap; gap: 0; justify-content: center; }
+    .node {
+        background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
+        padding: 14px 16px; text-align: center; min-width: 116px; flex: 0 0 auto;
+    }
+    .node .t { font-weight: 700; font-size: 0.95rem; }
+    .node .s { color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+    .node.primary { border-color: var(--primary); box-shadow: 0 0 0 1px rgba(106,163,255,0.25) inset; }
+    .arrow { display: flex; align-items: center; color: var(--primary); font-size: 1.4rem; padding: 0 6px; }
+    .side {
+        margin: 14px auto 0; display: flex; align-items: center; gap: 10px;
+        justify-content: center; color: var(--muted); font-size: 0.85rem;
+    }
+    .side .node { min-width: 100px; }
+
+    /* ── layered stack ── */
+    .layers { display: flex; flex-direction: column; gap: 10px; }
+    .layer {
+        display: flex; align-items: center; gap: 16px;
+        background: var(--surface-2); border: 1px solid var(--border);
+        border-left: 4px solid var(--primary); border-radius: 8px; padding: 14px 18px;
+    }
+    .layer .name { font-weight: 700; min-width: 130px; }
+    .layer .desc { color: var(--muted); font-size: 0.9rem; }
+    .layer.l2 { border-left-color: var(--accent); }
+    .layer.l3 { border-left-color: var(--green); }
+    .down { text-align: center; color: var(--muted); font-size: 1.1rem; line-height: 1; }
+
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 680px) { .grid2 { grid-template-columns: 1fr; } }
+    .mini { background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; }
+    .mini h4 { margin: 0 0 6px; font-size: 1rem; }
+    .mini p { margin: 0; color: var(--muted); font-size: 0.9rem; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.92rem; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-weight: 600; }
+    td code { font-size: 0.85em; }
+
+    ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; }
+    ol.steps li {
+        position: relative; padding: 12px 0 12px 44px; border-bottom: 1px solid var(--border);
+    }
+    ol.steps li:last-child { border-bottom: 0; }
+    ol.steps li::before {
+        counter-increment: s; content: counter(s);
+        position: absolute; left: 0; top: 12px; width: 28px; height: 28px;
+        background: var(--surface-2); border: 1px solid var(--border); color: var(--primary);
+        border-radius: 8px; display: flex; align-items: center; justify-content: center;
+        font-family: var(--mono); font-size: 0.85rem; font-weight: 700;
+    }
+    .pill { font-family: var(--mono); font-size: 0.82rem; color: var(--accent); }
+    footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85rem; text-align: center; }
+    .tree { font-family: var(--mono); font-size: 0.85rem; color: var(--muted); white-space: pre; overflow-x: auto; margin: 0; }
+</style>
+</head>
+<body>
+<header class="hero">
+    <h1>__PROJECT_DISPLAY__</h1>
+    <p>全端專案 Template — Spring Boot（後端）＋ Nuxt 4 BFF（前端）＋ PostgreSQL ＋ Redis，全部以 Docker Compose 運行。內建 JWT 使用者驗證骨架與 BFF 安全閘道，作為新專案的起點。</p>
+    <div>
+        <span class="tag">Nuxt 4</span>
+        <span class="tag">Spring Boot · Java 21</span>
+        <span class="tag">PostgreSQL</span>
+        <span class="tag">Redis</span>
+        <span class="tag">Docker Compose</span>
+        <span class="tag">JWT + Spring Security</span>
+    </div>
+</header>
+
+<div class="wrap">
+
+    <h2><span class="num">1</span>請求流向</h2>
+    <p class="lead">瀏覽器只與前端對話；JWT 全程留在伺服器端的 BFF，不外洩到瀏覽器。</p>
+    <div class="card">
+        <div class="flow">
+            <div class="node"><div class="t">Browser</div><div class="s">session cookie</div></div>
+            <div class="arrow">→</div>
+            <div class="node"><div class="t">Nginx</div><div class="s">反向代理</div></div>
+            <div class="arrow">→</div>
+            <div class="node primary"><div class="t">Nuxt BFF</div><div class="s">server/api</div></div>
+            <div class="arrow">→</div>
+            <div class="node"><div class="t">Spring Boot</div><div class="s">REST · 8080</div></div>
+            <div class="arrow">→</div>
+            <div class="node"><div class="t">PostgreSQL</div><div class="s">5432</div></div>
+        </div>
+        <div class="side">
+            <span>Nuxt BFF</span><span class="arrow" style="font-size:1rem">↓</span>
+            <div class="node"><div class="t">Redis</div><div class="s">session 6379</div></div>
+        </div>
+    </div>
+
+    <h2><span class="num">2</span>BFF 安全閘道</h2>
+    <p class="lead">這是這個 template 最關鍵的設計決策。</p>
+    <div class="grid2">
+        <div class="mini">
+            <h4>🔐 JWT 存在伺服器端</h4>
+            <p>登入後 Spring Boot 簽發的 JWT 由 Nuxt server（BFF）保管，瀏覽器只拿到一個 HttpOnly 的 session cookie，從根本消除 token 被 XSS 竊取的風險。</p>
+        </div>
+        <div class="mini">
+            <h4>🚪 單一出入口</h4>
+            <p>前端頁面只呼叫 <code>/api/*</code>；BFF 以 session 找出對應 JWT，附加到往 Spring Boot 的請求上再轉發。瀏覽器永遠看不到後端真實位址與 token。</p>
+        </div>
+    </div>
+
+    <h2><span class="num">3</span>後端分層</h2>
+    <p class="lead">三層式 ＋ DDD-lite；Service／Repository 皆 interface 對上層、實作在 <code>impl/</code>。資料存取用原生 JDBC（<code>NamedParameterJdbcTemplate</code>），非 JPA。</p>
+    <div class="card">
+        <div class="layers">
+            <div class="layer"><span class="name">Controller</span><span class="desc">REST 端點、參數驗證（@Valid）、錯誤交給 ExceptionHandler 回 ApiResponse</span></div>
+            <div class="down">↓</div>
+            <div class="layer l2"><span class="name">Service</span><span class="desc">應用邏輯；interface + impl/，跨領域可注入其他 Service/Repository</span></div>
+            <div class="down">↓</div>
+            <div class="layer l3"><span class="name">Repository</span><span class="desc">JDBC SQL（impl/）＋ RowMapper（rowmapper/）轉成 entity</span></div>
+            <div class="down">↓</div>
+            <div class="layer" style="border-left-color:var(--muted)"><span class="name">PostgreSQL</span><span class="desc">原生 SQL，動態過濾用整句靜態 + null-guard</span></div>
+        </div>
+        <p style="margin:18px 0 6px;color:var(--muted);font-size:0.85rem">套件結構（佔位 package，<code>/init-template</code> 會改名）</p>
+<pre class="tree">com.penguin.template/
+├── common/      共用物件（ApiResponse、PageCommand…）
+├── config/      WebSecurity、JWTConfig、OpenApiConfig…
+├── controller/  REST 端點（user）
+├── domain/      領域物件 auth、user（command/dto/exception）
+├── entity/      對應 DB 欄位（User）
+├── repository/  interface + impl/ + rowmapper/
+└── service/     interface + impl/（UserService、JWTService）</pre>
+    </div>
+
+    <h2><span class="num">4</span>前端 MVVM</h2>
+    <p class="lead">鐵則：<strong>禁止在 <code>.vue</code> 的 script 直接 fetch</strong>，資料抓取一律走 model（composable）。</p>
+    <div class="card">
+        <div class="flow">
+            <div class="node"><div class="t">View</div><div class="s">.vue template</div></div>
+            <div class="arrow">↔</div>
+            <div class="node primary"><div class="t">ViewModel</div><div class="s">.vue script</div></div>
+            <div class="arrow">→</div>
+            <div class="node"><div class="t">Model</div><div class="s">composables/model</div></div>
+            <div class="arrow">→</div>
+            <div class="node"><div class="t">BFF</div><div class="s">server/api</div></div>
+        </div>
+    </div>
+
+    <h2><span class="num">5</span>雙佔位符命名</h2>
+    <p class="lead">品牌名常含大寫，但 Docker Compose 專案名與 image repo 強制小寫——因此分成兩個佔位符，<code>/init-template</code> 會各自替換。</p>
+    <div class="card" style="padding-top:6px">
+        <table>
+            <thead><tr><th>佔位符</th><th>用途</th><th>範例</th></tr></thead>
+            <tbody>
+                <tr><td><span class="pill">__PROJECT_DISPLAY__</span></td><td>品牌顯示名（OpenAPI 標題、WEBSITE_NAME、Sidebar、README 標題）</td><td><code>YanduoERP</code></td></tr>
+                <tr><td><span class="pill">__PROJECT_NAME__</span></td><td>小寫機器 slug（Docker Compose 專案名、GHCR image repo、PostgreSQL、域名、cookie）</td><td><code>yanduoerp</code></td></tr>
+            </tbody>
+        </table>
+        <p style="margin:14px 0 0;color:var(--muted);font-size:0.88rem">另：Java package 用真實字 <code>template</code> 佔位（語法不允許 <code>__…__</code>），由 <code>/init-template</code> 一併改名為 <code>com.penguin.&lt;slug&gt;</code>。</p>
+    </div>
+
+    <h2><span class="num">6</span>JWT 認證流程</h2>
+    <div class="card">
+        <ol class="steps">
+            <li><strong>註冊</strong> <span class="pill">POST /api/users/signUp</span> — 建立使用者（密碼 BCrypt）。</li>
+            <li><strong>登入</strong> <span class="pill">POST /api/users/signIn</span> — 驗證密碼，簽發 JWT；BFF 以 session 保管 JWT、回傳 cookie。</li>
+            <li><strong>受保護請求</strong> — <code>JWTAuthenticationFilter</code> 解析 Bearer token → <code>AuthFacade</code> 驗證 token 並確認使用者存在 DB → 放行。</li>
+        </ol>
+        <p style="margin:16px 0 0;color:var(--muted);font-size:0.88rem">Spring Security 僅做「JWT 有效且 user 存在」驗證，<strong>不含 RBAC</strong>，保持骨架精簡。</p>
+    </div>
+
+    <h2><span class="num">7</span>環境需求</h2>
+    <div class="grid2">
+        <div class="mini"><h4>Java 21</h4><p>後端 <code>pom.xml</code> 設定 <code>java.version=21</code>，內含 Maven Wrapper <code>./mvnw</code>，免裝全域 Maven。</p></div>
+        <div class="mini"><h4>Node.js ≥ 18 LTS</h4><p>初始化與 scaffolding 是 <code>.mjs</code> 腳本（<code>init-template</code>、<code>be-entity</code>…），純 Node 內建模組、免 <code>npm install</code>，但需先裝 Node。</p></div>
+        <div class="mini"><h4>Docker / Docker Compose</h4><p>PostgreSQL、Redis、後端、前端、Nginx 皆以 Compose 運行。</p></div>
+        <div class="mini"><h4>OS</h4><p>以 macOS / Linux 為主要測試環境；Windows 建議於 WSL 下執行腳本。</p></div>
+        <div class="mini"><h4>mkcert</h4><p>本機 HTTPS 憑證工具（nginx 需要）。安裝後先執行一次 <code>mkcert -install</code>，把本機 CA 裝進系統信任庫。</p></div>
+    </div>
+
+    <h2><span class="num">8</span>啟動流程</h2>
+    <p class="lead">已用 <code>/init-template</code> 初始化的專案 —— <code>Docker/.env</code> 已自動建立並含 <code>JWT_SECRET</code>。</p>
+    <div class="card">
+        <p style="margin:0 0 12px;color:var(--muted);font-size:0.88rem">一次性前置（每台機器一次）：安裝 <code>mkcert</code> 後執行 <code>mkcert -install</code>。</p>
+        <ol class="steps">
+            <li><strong>產生本機 HTTPS 憑證</strong>（憑證不存在會導致 nginx 啟動失敗；從 ssl 目錄執行才會放到正確位置）<br><code>cd Docker/nginx/ssl &amp;&amp; sh generate-ssl.sh &amp;&amp; cd -</code></li>
+            <li><strong>設定 hosts</strong>（讓網域指向本機）<br><code>echo "127.0.0.1 __PROJECT_NAME__.local.com" | sudo tee -a /etc/hosts</code></li>
+            <li><strong>啟動全部服務</strong><br><code>cd Docker &amp;&amp; sh startup.sh</code><br><span style="color:var(--muted);font-size:0.85rem">自動：起 PG/Redis → 等 PG 就緒（首次匯入 schema.sql / data.sql）→ 多階段 build jar → 起 Spring Boot / Nuxt / Nginx</span></li>
+            <li><strong>開啟網站</strong><br>前端 <code>https://__PROJECT_NAME__.local.com</code>　·　Swagger <code>http://localhost:8080/swagger-ui/index.html</code></li>
+        </ol>
+        <p style="margin:14px 0 0;color:var(--muted);font-size:0.85rem">改完後端 Java 要重新打包：<code>cd BE/SpringBoot &amp;&amp; make re</code>（= compose <code>up -d --build springboot</code>）。</p>
+    </div>
+
+    <footer>
+        本文件描述 __PROJECT_DISPLAY__ template 的架構設計。詳細慣例與套件說明見各模組 README。
+    </footer>
+</div>
+</body>
+</html>

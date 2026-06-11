@@ -1,0 +1,62 @@
+import { defineEventHandler, readBody, createError, setCookie } from 'h3'
+
+export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig()
+    const body = await readBody<{
+        email?: string
+        password?: string
+    }>(event)
+
+    const email = body?.email
+    const password = body?.password
+
+    if (!email || !password) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: '缺少 email 或 password',
+        })
+    }
+
+    const runtimeConfig = useRuntimeConfig()
+    const apiBase = runtimeConfig.AUTH_API
+
+    try {
+        const response = await $fetch<{ token?: string; userId?: string }>(`${apiBase}/users/signIn`, {
+            method: 'POST',
+            body: { email, password },
+        })
+
+        if (!response?.token || !response?.userId) {
+            throw createError({
+                statusCode: 502,
+                statusMessage: '後端登入回應不完整',
+            })
+        }
+
+        const session = {
+            token: response.token,
+            user: {
+                userId: response.userId,
+                email,
+            },
+        }
+        const sessionId = crypto.randomUUID()
+        await useStorage('redis').setItem(sessionId, JSON.stringify(session))
+
+        setCookie(event, config.public.SESSION_COOKIE, sessionId, {
+            httpOnly: true,
+            sameSite: 'lax',
+            path: '/',
+            secure: process.env.COOKIE_SECURE === 'true',
+            maxAge: 60 * 60 * 24 * 7, // 7 天
+        })
+
+        return session
+    } catch (error: unknown) {
+        const err = error as { response?: { status?: number }; statusCode?: number; data?: { message?: string }; statusMessage?: string }
+        const statusCode = err?.response?.status ?? err?.statusCode ?? 500
+        const statusMessage = err?.data?.message ?? err?.statusMessage ?? '登入失敗，請稍後再試'
+
+        throw createError({ statusCode, statusMessage })
+    }
+})
