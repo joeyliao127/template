@@ -179,3 +179,8 @@ console.log(`\n${GREEN}完成${R}：${display} ${DIM}(slug: ${slug})${R}`)
 console.log(`${DIM}新專案位於：${root}${R}`)
 console.log(`${DIM}原 template 未變動。接著可：cd ${path.join('..', slug)} && cd Docker && sh startup.sh${R}`)
 console.log(`${DIM}提醒：首次 pnpm install 會重新產生 lockfile；可在新資料夾 git init 重新建立版控。${R}`)
+
+console.log(`\n${CYAN}本機 HTTPS 前置（首次一次性，startup.sh 會自動生成憑證但仍需以下兩步）${R}`)
+console.log(`${DIM}1. 安裝本機 CA：${R}mkcert -install ${DIM}（需先 brew install mkcert nss）${R}`)
+console.log(`${DIM}2. 在 /etc/hosts 加入一行：${R}127.0.0.1 ${slug}.local.com`)
+console.log(`${DIM}   完成後瀏覽 https://${slug}.local.com${R}`)

@@ -23,6 +23,7 @@ argument-hint: <ProjectName> <一句專案描述>
    - 原 template 未變動；新專案在 `../<slug>/`，需 `cd` 進去再操作。
    - 尚未 build／啟動；首次 `pnpm install` 會重新產生 `pnpm-lock.yaml`。
    - 可在新資料夾用 `git init` 重新建立版本控制。
+   - 本機 HTTPS 前置（首次一次性）：`startup.sh` 會自動以 mkcert 生成 SSL 憑證，但仍需使用者先 `mkcert -install`（安裝本機 CA），並在 `/etc/hosts` 加入 `127.0.0.1 <slug>.local.com`。
 
 ## 注意
 

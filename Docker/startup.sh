@@ -27,6 +27,13 @@ until docker exec "${PROJECT_NAME}_pg" pg_isready -h 127.0.0.1 -p "${POSTGRES_PO
 done
 echo "✅ PostgreSQL 就緒"
 
+# nginx 需要 SSL 憑證才能啟動；憑證為機器專屬（mkcert 簽），不入庫，首次自動生成。
+CERT_FILE="nginx/ssl/${PROJECT_NAME}.local.com.pem"
+if [ ! -f "$CERT_FILE" ]; then
+    echo "🔐 未發現 SSL 憑證，使用 mkcert 產生（需先安裝 mkcert 並執行 mkcert -install）..."
+    sh nginx/ssl/generate-ssl.sh
+fi
+
 echo "🐳 啟動應用（Spring Boot、Nuxt、Nginx）..."
 # 加 --build 確保 image 永遠對應當前原始碼（避免沿用舊 image 導致找不到 jar）。
 # 未改動時有 layer cache，幾乎瞬間完成。
