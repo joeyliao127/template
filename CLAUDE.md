@@ -10,7 +10,7 @@ __PROJECT_DISPLAY__ is a full-stack starter template:
 - **Database/** — PostgreSQL schema and seed data
 - **Docker/** — Docker Compose for local dev and production
 
-> This is a clean skeleton. Two placeholders are used: `__PROJECT_DISPLAY__` (brand/display name, e.g. shown in titles) and `__PROJECT_NAME__` (lowercase machine slug for Docker/PG/domain/cookie). The Java package uses `template`. See `TEMPLATE.md` for the rename steps when starting a new project.
+> This is a clean skeleton. Two placeholders are used: `__PROJECT_DISPLAY__` (brand/display name, e.g. shown in titles) and `__PROJECT_NAME__` (lowercase machine slug for Docker/PG/domain/cookie). The Java package uses `template`. Run `/init-template` when starting a new project to replace the placeholders and rename the Java package (see `BE/SpringBoot/README.md` → 第一次使用 template).
 
 ## Development Commands
 

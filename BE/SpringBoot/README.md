@@ -52,18 +52,36 @@ com.penguin.template/            # template 佔位 package；/init-template 會�
 - **（選用）JDK 21**：只有要在 IDE 直接跑後端 / 測試（不透過 Docker）才需要；pom 設 `java.version=21`，內含 `./mvnw`。
 - **OS**：以 macOS / Linux 為主；Windows 建議在 WSL 下執行腳本。
 
-## 啟動流程
+## 第一次使用 template
 
-> 假設已用 `/init-template` 初始化 —— 此時 `Docker/.env` 已自動建立並含 `JWT_SECRET`。
-> 若只是評估 template、未跑 init，請先 `cp Docker/.template.env Docker/.env`。
+這個 repo 是一個乾淨的全端骨架；專案名稱用 **兩個佔位符** 表示，初始化後替換即可變成你的新專案。
 
-**一次性前置（每台機器一次）**
+| 佔位符 | 用途 | 範例 | 規則 |
+|--------|------|------|------|
+| `__PROJECT_DISPLAY__` | 品牌／顯示名（OpenAPI 標題、`WEBSITE_NAME`、Sidebar、README 標題） | `YanduoERP` | 任意字串，可含大寫 |
+| `__PROJECT_NAME__` | 機器用 slug（Docker Compose 專案名、GHCR image repo、PostgreSQL、域名、cookie） | `yanduoerp` | **必須全小寫**，符合 `^[a-z][a-z0-9_-]*$` |
+
+> 為什麼分兩個？Docker Compose 專案名與 image repo 名 **強制小寫**，但品牌名常含大寫——分開才能兩者兼顧。
+> Java package 用真實字 `template` 佔位（語法不允許 `__…__`），值同 slug。
+
+### 步驟 0：初始化
+
+```bash
+cp -r template my-project && cd my-project
+rm -rf .git && git init
+```
+
+接著執行 `/init-template`，它會一次完成：替換兩個佔位符、把 Java package `com.penguin.template` 與 `TemplateApplication` 改名為你的 slug、並建立含 `JWT_SECRET` 的 `Docker/.env`。
+
+> 若只是評估 template、未跑 init，請先手動 `cp Docker/.template.env Docker/.env`。
+
+### 步驟 1：一次性前置（每台機器一次）
 
 ```bash
 mkcert -install        # 將本機 CA 裝進系統信任庫
 ```
 
-**啟動步驟**
+### 步驟 2：啟動全部服務
 
 ```bash
 # 1) 產生 nginx 用的本機 HTTPS 憑證（憑證不存在會導致 nginx 啟動失敗）
