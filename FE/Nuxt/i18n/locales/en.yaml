@@ -21,6 +21,8 @@ common:
 
 nav:
     overview: Overview
+    users: Users
+    components: Components
     profile: Profile
     security: Security
     settings: Settings
@@ -38,24 +40,47 @@ pages:
         recentNotesDesc: Welcome to your dashboard
 
     signIn:
-        tagline: Collaborate with partners
-        buildBrain: Build your second brain
-        withCode: with
-        method: Method.
-        signInTitle: Sign In
-        signUpTitle: Sign Up
+        eyebrow: Workspace · Console
+        headline: Design, quietly.
+        pitch: A starting skeleton for clean, content-first products. Sign in to manage your team.
+        footer: "© 2026 {name} — MIT licensed"
+        signInTitle: Sign in
+        signUpTitle: Sign up
+        welcomeBack: Welcome back. Enter your details to continue.
+        createAccount: Create your account to get started.
         email: Email
         password: Password
         username: Username
-        confirmPassword: Confirm Your Password
-        signInBtn: Sign In
-        signUpBtn: Sign Up
-        noAccount: "Don't have an account? Click"
-        register: Register
-        backTo: Back to
+        confirmPassword: Confirm your password
+        rememberMe: Remember me
+        forgotPassword: Forgot password?
+        signInBtn: Sign in
+        signUpBtn: Create account
+        demoHint: Demo · sign in with
+        noAccount: "Don't have an account?"
+        register: Create one
+        backTo: Already have an account?
         signinLink: Sign in
         passwordMismatch: Passwords do not match
         signUpFailed: Registration failed, please try again
+
+    components:
+        title: Components
+        subtitle: Live specimens of the Template design system.
+
+    users:
+        title: Users
+        subtitle: Everyone with access to this workspace.
+        invite: Invite people
+        filters: Filters
+        searchPlaceholder: Search name or email…
+        colName: Name
+        colStatus: Status
+        colJoined: Joined
+        statusActive: Active
+        statusInvited: Invited
+        statusSuspended: Suspended
+        empty: No users match “{q}”.
 
 settings:
     profile:

@@ -50,7 +50,7 @@ async function save() {
         toast.add({ title: t('settings.profile.saveSuccess'), color: 'primary' })
         emit('saved', usernameInput.value)
     } catch {
-        toast.add({ title: t('settings.profile.saveFailed'), color: 'alert' })
+        toast.add({ title: t('settings.profile.saveFailed'), color: 'error' })
     } finally {
         saving.value = false
     }

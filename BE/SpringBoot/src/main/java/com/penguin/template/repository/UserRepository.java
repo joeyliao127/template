@@ -7,6 +7,10 @@ import java.util.UUID;
 import com.penguin.template.entity.User;
 
 public interface UserRepository {
+    List<User> find(int limit, int offset);
+
+    int count();
+
     Optional<User> get(UUID id);
 
     User create(User user);

@@ -5,11 +5,11 @@
             <template #header />
             <template #body>
                 <div class="flex items-center gap-3 px-5 pt-5 pb-4">
-                    <UIcon name="i-lucide-triangle-alert" class="w-6 h-6 text-yellow-400 shrink-0" />
-                    <span class="text-white font-medium text-base leading-snug" v-html="dialog.message" />
+                    <UIcon name="i-lucide-triangle-alert" class="w-6 h-6 text-warning shrink-0" />
+                    <span class="font-medium text-base leading-snug" v-html="dialog.message" />
                 </div>
                 <div class="flex justify-center gap-x-4 px-5 pb-5">
-                    <UButton color="alert" class="min-w-24 h-10 text-white font-medium" @click="handleConfirm(dialog.id, dialog.callback)">
+                    <UButton color="error" class="min-w-24 h-10 font-medium" @click="handleConfirm(dialog.id, dialog.callback)">
                         確定
                     </UButton>
                 </div>
@@ -21,17 +21,17 @@
             <template #header />
             <template #body>
                 <div class="flex items-center gap-3 pb-4">
-                    <UIcon name="i-lucide-triangle-alert" class="w-6 h-6 text-yellow-400 shrink-0" />
-                    <span class="text-white font-medium text-base leading-snug" v-html="dialog.message" />
+                    <UIcon name="i-lucide-triangle-alert" class="w-6 h-6 text-warning shrink-0" />
+                    <span class="font-medium text-base leading-snug" v-html="dialog.message" />
                 </div>
                 <div class="flex justify-center gap-x-4">
-                    <UButton color="alert" class="min-w-24 h-10 text-white font-medium" @click="handleConfirm(dialog.id, dialog.callback)">
+                    <UButton color="error" class="min-w-24 h-10 font-medium" @click="handleConfirm(dialog.id, dialog.callback)">
                         確認
                     </UButton>
                     <UButton
-                        variant="ghost"
+                        variant="outline"
                         color="neutral"
-                        class="min-w-24 h-10 border border-white/20 text-white font-medium hover:bg-white/10"
+                        class="min-w-24 h-10 font-medium"
                         @click="handleClose(dialog.id)"
                     >
                         取消
@@ -45,11 +45,11 @@
             <template #header />
             <template #body>
                 <div class="flex items-center gap-3 px-5 pt-5 pb-4">
-                    <UIcon name="i-lucide-info" class="w-6 h-6 text-blue-400 shrink-0" />
-                    <span class="text-white font-medium text-base leading-snug" v-html="dialog.message" />
+                    <UIcon name="i-lucide-info" class="w-6 h-6 text-info shrink-0" />
+                    <span class="font-medium text-base leading-snug" v-html="dialog.message" />
                 </div>
                 <div class="flex justify-center gap-x-4 px-5 pb-5">
-                    <UButton color="primary" class="min-w-24 h-10 text-white font-medium" @click="handleConfirm(dialog.id, dialog.callback)">
+                    <UButton color="primary" class="min-w-24 h-10 font-medium" @click="handleConfirm(dialog.id, dialog.callback)">
                         知道了
                     </UButton>
                 </div>
@@ -65,7 +65,7 @@ import { useDialogs } from '~/composables/useDialogs'
 const { dialogs, close } = useDialogs()
 
 const UI_DIALOG = {
-    content: 'rounded-sm glass-strong max-w-120 shadow-xl',
+    content: 'rounded-xl bg-default ring ring-default max-w-120 shadow-xl',
     header: 'hidden',
     body: 'p-0',
     overlay: 'bg-black/50',

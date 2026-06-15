@@ -31,6 +31,22 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public List<User> find(int limit, int offset) {
+        String sql = BASE_SELECT + " ORDER BY u.created_at DESC LIMIT :limit OFFSET :offset";
+        SqlParameterSource params = new MapSqlParameterSource()
+            .addValue("limit", limit)
+            .addValue("offset", offset);
+        return jdbcTemplate.query(sql, params, rowMapper);
+    }
+
+    @Override
+    public int count() {
+        String sql = "SELECT COUNT(*) FROM users";
+        Integer total = jdbcTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
+        return total == null ? 0 : total;
+    }
+
+    @Override
     public Optional<User> get(UUID id) {
         String sql = BASE_SELECT + " WHERE u.id = :id";
         List<User> result = jdbcTemplate.query(sql, java.util.Map.of("id", id), rowMapper);

@@ -4,12 +4,12 @@
             <div class="text-lg font-semibold">{{ title || '確認' }}</div>
         </template>
 
-        <p class="text-sm text-slate-300">{{ message }}</p>
+        <p class="text-sm text-muted">{{ message }}</p>
 
         <template #footer>
             <div class="flex gap-2 justify-end">
                 <UButton variant="ghost" @click="$emit('update:open', false)">取消</UButton>
-                <UButton :loading="loading" color="accent" @click="handleConfirm">
+                <UButton :loading="loading" color="error" @click="handleConfirm">
                     {{ confirmText || '確定刪除' }}
                 </UButton>
             </div>

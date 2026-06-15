@@ -1,154 +1,107 @@
 <template>
-    <div class="auth-page">
-        <!-- Atmospheric background -->
-        <div class="auth-bg" aria-hidden="true" />
+    <div class="auth">
+        <!-- Left: ink brand panel -->
+        <aside class="auth__brand">
+            <span class="wordmark">
+                {{ appConfig.WEBSITE_NAME }}<span class="wordmark__dot">.</span>
+            </span>
 
-        <div class="auth-layout">
-            <!-- Left: Branding -->
-            <div class="auth-left">
-                <h1 class="auth-tagline">{{ $t('pages.signIn.tagline') }}</h1>
-                <div class="auth-sub">
-                    <p class="sub-line sub-left">
-                        {{ $t('pages.signIn.buildBrain') }}
-                    </p>
-                    <p class="sub-line sub-right">
-                        {{ $t('pages.signIn.withCode') }}
-                        <span class="code-word">CODE</span>
-                        {{ $t('pages.signIn.method') }}
-                    </p>
-                </div>
-                <ul class="code-list">
-                    <li>
-                        <span class="code-letter">C</span>
-                        apture
-                    </li>
-                    <li>
-                        <span class="code-letter">O</span>
-                        rganization
-                    </li>
-                    <li>
-                        <span class="code-letter">D</span>
-                        istill
-                    </li>
-                    <li>
-                        <span class="code-letter">E</span>
-                        xpress
-                    </li>
-                </ul>
+            <div class="auth__pitch">
+                <div class="t-eyebrow auth__eyebrow">{{ $t('pages.signIn.eyebrow') }}</div>
+                <h1>{{ $t('pages.signIn.headline') }}</h1>
+                <p>{{ $t('pages.signIn.pitch') }}</p>
             </div>
 
-            <!-- Right: Glass card -->
-            <div class="auth-right">
-                <div class="glass-card">
-                    <!-- Sign In Form -->
-                    <template v-if="mode === 'signIn'">
-                        <h2 class="form-title">
-                            {{ $t('pages.signIn.signInTitle') }}
-                        </h2>
+            <div class="auth__brandfoot">{{ $t('pages.signIn.footer', { name: appConfig.WEBSITE_NAME }) }}</div>
+        </aside>
 
-                        <UForm :state="signInState" :schema="signInSchema" class="form-body" @submit="onSignIn">
-                            <UFormField name="email">
-                                <UInput
-                                    v-model="signInState.email"
-                                    type="email"
-                                    :placeholder="$t('pages.signIn.email')"
-                                    trailing-icon="i-lucide-mail"
-                                    class="form-input w-full"
-                                />
-                            </UFormField>
+        <!-- Right: paper form panel -->
+        <main class="auth__form">
+            <div class="auth__form-inner">
+                <!-- Sign In -->
+                <template v-if="mode === 'signIn'">
+                    <div class="auth__head">
+                        <h2>{{ $t('pages.signIn.signInTitle') }}</h2>
+                        <p>{{ $t('pages.signIn.welcomeBack') }}</p>
+                    </div>
 
-                            <UFormField name="password">
-                                <UInput
-                                    v-model="signInState.password"
-                                    type="password"
-                                    :placeholder="$t('pages.signIn.password')"
-                                    trailing-icon="i-lucide-lock"
-                                    class="form-input w-full"
-                                />
-                            </UFormField>
+                    <UForm :state="signInState" :schema="signInSchema" class="auth__fields" @submit="onSignIn">
+                        <UFormField :label="$t('pages.signIn.email')" name="email">
+                            <UInput v-model="signInState.email" type="email" autocomplete="username" placeholder="you@company.com" />
+                        </UFormField>
 
-                            <p v-if="authError" class="form-error">
-                                {{ authError }}
-                            </p>
+                        <UFormField :label="$t('pages.signIn.password')" name="password">
+                            <UInput v-model="signInState.password" type="password" autocomplete="current-password" placeholder="••••••••" />
+                        </UFormField>
 
-                            <UButton type="submit" :loading="isLoading" class="form-submit text-sencondary w-full">
-                                {{ $t('pages.signIn.signInBtn') }}
-                            </UButton>
-                        </UForm>
+                        <div class="auth__row">
+                            <UCheckbox v-model="rememberMe" :label="$t('pages.signIn.rememberMe')" />
+                            <a class="auth__link" href="#" @click.prevent>{{ $t('pages.signIn.forgotPassword') }}</a>
+                        </div>
 
-                        <p class="form-switch">
-                            {{ $t('pages.signIn.noAccount') }}
-                            <button class="switch-link" @click="switchMode('signUp')">
-                                {{ $t('pages.signIn.register') }}
-                            </button>
+                        <p v-if="authError" class="auth__error">
+                            {{ authError }}
                         </p>
-                    </template>
 
-                    <!-- Sign Up Form -->
-                    <template v-else>
-                        <h2 class="form-title">
-                            {{ $t('pages.signIn.signUpTitle') }}
-                        </h2>
+                        <UButton type="submit" :loading="isLoading" block class="auth__submit" trailing-icon="i-lucide-arrow-right">
+                            {{ $t('pages.signIn.signInBtn') }}
+                        </UButton>
+                    </UForm>
 
-                        <UForm :state="signUpState" :schema="signUpSchema" class="form-body" @submit="onSignUp">
-                            <UFormField name="username">
-                                <UInput
-                                    v-model="signUpState.username"
-                                    :placeholder="$t('pages.signIn.username')"
-                                    trailing-icon="i-lucide-user"
-                                    class="form-input w-full"
-                                />
-                            </UFormField>
+                    <div class="auth__hint">
+                        {{ $t('pages.signIn.demoHint') }} <b>admin@__PROJECT_NAME__.com</b> / <b>admin1234</b>
+                    </div>
 
-                            <UFormField name="email">
-                                <UInput
-                                    v-model="signUpState.email"
-                                    type="email"
-                                    :placeholder="$t('pages.signIn.email')"
-                                    trailing-icon="i-lucide-mail"
-                                    class="form-input w-full"
-                                />
-                            </UFormField>
+                    <p class="auth__switch">
+                        {{ $t('pages.signIn.noAccount') }}
+                        <button class="auth__switch-link" @click="switchMode('signUp')">
+                            {{ $t('pages.signIn.register') }}
+                        </button>
+                    </p>
+                </template>
 
-                            <UFormField name="password">
-                                <UInput
-                                    v-model="signUpState.password"
-                                    type="password"
-                                    :placeholder="$t('pages.signIn.password')"
-                                    trailing-icon="i-lucide-lock"
-                                    class="form-input w-full"
-                                />
-                            </UFormField>
+                <!-- Sign Up -->
+                <template v-else>
+                    <div class="auth__head">
+                        <h2>{{ $t('pages.signIn.signUpTitle') }}</h2>
+                        <p>{{ $t('pages.signIn.createAccount') }}</p>
+                    </div>
 
-                            <UFormField name="passwordConfirm">
-                                <UInput
-                                    v-model="signUpState.passwordConfirm"
-                                    type="password"
-                                    :placeholder="$t('pages.signIn.confirmPassword')"
-                                    trailing-icon="i-lucide-lock"
-                                    class="form-input w-full"
-                                />
-                            </UFormField>
+                    <UForm :state="signUpState" :schema="signUpSchema" class="auth__fields" @submit="onSignUp">
+                        <UFormField :label="$t('pages.signIn.username')" name="username">
+                            <UInput v-model="signUpState.username" autocomplete="username" />
+                        </UFormField>
 
-                            <p v-if="authError" class="form-error">
-                                {{ authError }}
-                            </p>
+                        <UFormField :label="$t('pages.signIn.email')" name="email">
+                            <UInput v-model="signUpState.email" type="email" placeholder="you@company.com" />
+                        </UFormField>
 
-                            <UButton type="submit" :loading="isLoading" class="form-submit text-sencondary w-full">
-                                {{ $t('pages.signIn.signUpBtn') }}
-                            </UButton>
-                        </UForm>
+                        <UFormField :label="$t('pages.signIn.password')" name="password">
+                            <UInput v-model="signUpState.password" type="password" autocomplete="new-password" placeholder="••••••••" />
+                        </UFormField>
 
-                        <p class="form-switch">
-                            {{ $t('pages.signIn.backTo') }}
-                            <button class="switch-link" @click="switchMode('signIn')">
-                                {{ $t('pages.signIn.signinLink') }}
-                            </button>
+                        <UFormField :label="$t('pages.signIn.confirmPassword')" name="passwordConfirm">
+                            <UInput v-model="signUpState.passwordConfirm" type="password" autocomplete="new-password" placeholder="••••••••" />
+                        </UFormField>
+
+                        <p v-if="authError" class="auth__error">
+                            {{ authError }}
                         </p>
-                    </template>
-                </div>
+
+                        <UButton type="submit" :loading="isLoading" block class="auth__submit" trailing-icon="i-lucide-arrow-right">
+                            {{ $t('pages.signIn.signUpBtn') }}
+                        </UButton>
+                    </UForm>
+
+                    <p class="auth__switch">
+                        {{ $t('pages.signIn.backTo') }}
+                        <button class="auth__switch-link" @click="switchMode('signIn')">
+                            {{ $t('pages.signIn.signinLink') }}
+                        </button>
+                    </p>
+                </template>
             </div>
-        </div>
+        </main>
     </div>
 </template>
 
@@ -161,10 +114,12 @@ definePageMeta({ layout: 'default', auth: false })
 
 const { t } = useI18n()
 const { signIn, status } = useAuth()
+const appConfig = useAppConfig()
 
 const mode = ref<'signIn' | 'signUp'>('signIn')
 const isLoading = ref(false)
 const authError = ref<string | null>(null)
+const rememberMe = ref(true)
 
 // ── Sign In ──────────────────────────────────────────
 const signInState = ref({ email: 'admin@__PROJECT_NAME__.com', password: 'admin1234' })
@@ -267,166 +222,199 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-@reference "~/assets/css/tailwind.css";
-
-/* ── Page shell ─────────────────────────────────────── */
-.auth-page {
-    @apply relative min-h-screen w-full overflow-hidden;
-    color-scheme: dark;
-    color: var(--auth-text);
+/* ── Split layout:左墨黑品牌區 / 右紙白表單 ─────────── */
+.auth {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    animation: fade var(--duration-slow) var(--ease-out) both;
 }
 
-.auth-bg {
-    @apply absolute inset-0 z-0 bg-cover bg-center bg-no-repeat;
-    background-image: url('/image/fugi.jpeg');
+@keyframes fade {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
 }
 
-/* ── Two-column layout ─────────────────────────────── */
-.auth-layout {
-    @apply relative z-10 flex items-center justify-center min-h-screen py-12 px-16 mx-auto;
-    gap: clamp(14rem, 20vw, 22rem);
-    max-width: calc(100vw - 8rem);
+@media (prefers-reduced-motion: reduce) {
+    .auth {
+        animation: none;
+    }
 }
 
-/* ── Left branding ──────────────────────────────────── */
-.auth-left {
-    @apply flex-1 max-w-[480px];
+/* ── Wordmark ───────────────────────────────────────── */
+.wordmark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-tight);
+    font-size: var(--text-h5);
 }
 
-.auth-tagline {
-    @apply text-[3.25rem] font-semibold leading-tight mb-5 whitespace-nowrap;
-    color: var(--auth-text-strong);
+.wordmark__dot {
+    color: var(--neutral-500);
 }
 
-.auth-sub {
-    @apply mb-8;
+/* ── Brand panel ────────────────────────────────────── */
+.auth__brand {
+    background: var(--surface-inverse);
+    color: var(--text-inverse);
+    padding: var(--space-12, 3rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.sub-line {
-    @apply text-[1.6rem] leading-[1.7] m-0;
-    color: var(--auth-text-subtle);
+.auth__pitch {
+    max-width: 30ch;
 }
 
-.sub-right {
-    @apply ml-5;
+.auth__eyebrow {
+    color: var(--neutral-500);
+    margin-bottom: 1rem;
 }
 
-.code-word {
-    @apply font-bold text-[1.9rem] align-baseline;
-    color: var(--primary);
+.auth__pitch h1 {
+    color: var(--text-inverse);
+    font-size: var(--text-h1);
+    letter-spacing: var(--tracking-tighter);
+    margin-bottom: 1rem;
 }
 
-.code-list {
-    @apply list-none p-0 m-0 flex flex-col gap-2;
+.auth__pitch p {
+    color: var(--neutral-400);
+    font-size: var(--text-body-lg);
 }
 
-.code-list li {
-    @apply text-[1.3rem] flex items-center gap-[0.1rem];
-    color: var(--auth-text-subtle);
+.auth__brandfoot {
+    color: var(--neutral-500);
+    font-size: var(--text-caption);
 }
 
-.code-letter {
-    @apply font-bold text-[1.35rem] inline-block w-4;
-    color: var(--primary);
+/* ── Form panel ─────────────────────────────────────── */
+.auth__form {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--surface-page);
 }
 
-/* ── Right: glass card ─────────────────────────────── */
-.auth-right {
-    @apply flex items-center justify-center;
+.auth__form-inner {
+    width: 100%;
+    max-width: 360px;
+    margin-inline: auto;
 }
 
-.glass-card {
-    @apply w-[400px] h-[500px] rounded-[20px] bg-transparent border-2 border-white/20 overflow-y-auto flex flex-col;
-    padding: 40px 50px 24px 50px; /* asymmetric padding */
-    -webkit-backdrop-filter: blur(20px);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 0 30px var(--shadow-dark);
+.auth__head {
+    margin-bottom: 2rem;
 }
 
-/* ── Form internals ─────────────────────────────────── */
-.form-title {
-    @apply text-center text-xl font-semibold mb-6;
-    color: var(--auth-text-strong);
+.auth__head h2 {
+    font-size: var(--text-h3);
+    margin-bottom: 0.5rem;
 }
 
-.form-body {
-    @apply flex flex-col gap-4;
+.auth__head p {
+    color: var(--text-secondary);
 }
 
-/* Override Nuxt UI input styles for glass context */
-.form-input :deep(input) {
-    background: transparent;
+.auth__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+/* DS input 高度 40px(Nuxt UI 預設偏矮) */
+.auth__fields :deep(input) {
+    height: 40px;
+    font-size: var(--text-body-sm);
+}
+
+.auth__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.auth__link {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.auth__link:hover {
+    color: var(--text-primary);
+}
+
+.auth__error {
+    font-size: var(--text-caption);
+    color: var(--status-danger);
+}
+
+.auth__submit {
+    margin-top: 0.5rem;
+    height: 40px;
+}
+
+/* ── Demo hint(mono,hairline 分隔)──────────────── */
+.auth__hint {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border-subtle);
+    font-family: var(--font-mono);
+    font-size: var(--text-caption);
+    color: var(--text-tertiary);
+    line-height: var(--leading-relaxed);
+}
+
+.auth__hint b {
+    color: var(--text-secondary);
+    font-weight: var(--weight-medium);
+}
+
+/* ── Mode switch ────────────────────────────────────── */
+.auth__switch {
+    margin-top: 1.25rem;
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+}
+
+.auth__switch-link {
+    background: none;
     border: none;
-    border-bottom: 1.5px solid var(--auth-input-border);
-    border-radius: 0;
-    color: var(--auth-text);
-    padding-left: 0.5rem;
-    transition: border-color 180ms ease;
+    padding: 0;
+    font: inherit;
+    color: var(--text-primary);
+    text-decoration: underline;
+    text-decoration-color: var(--border-default);
+    text-underline-offset: 0.2em;
+    cursor: pointer;
 }
 
-.form-input :deep(input::placeholder) {
-    color: var(--auth-text-subtle);
-}
-
-.form-input :deep(input:focus) {
-    outline: none;
-    border-bottom-color: var(--auth-input-border-focus);
-    box-shadow: none;
-}
-
-.form-input :deep(.i-lucide-mail),
-.form-input :deep(.i-lucide-lock),
-.form-input :deep(.i-lucide-user) {
-    color: var(--auth-text-subtle);
-}
-
-.form-error {
-    @apply text-[0.78rem] -mt-1;
-    color: var(--accent);
-}
-
-.form-submit {
-    @apply mt-0 border-0 rounded font-semibold;
-    background: var(--primary);
-    transition: background 180ms ease;
-}
-
-.form-submit:hover {
-    background: var(--primary-dark);
-}
-
-.form-switch {
-    @apply mt-5 text-center text-[0.82rem];
-    color: var(--auth-text-subtle);
-}
-
-.switch-link {
-    @apply font-semibold underline cursor-pointer bg-transparent border-0 p-0;
-    color: var(--auth-text);
-    font-size: inherit;
-    font-family: inherit;
-}
-
-.switch-link:hover {
-    color: var(--primary);
+.auth__switch-link:hover {
+    text-decoration-color: var(--text-primary);
 }
 
 /* ── Responsive ─────────────────────────────────────── */
-@media (max-width: 768px) {
-    .auth-layout {
-        @apply flex-col justify-center items-center py-8 px-6;
-        gap: 0;
-        max-width: 100vw;
+@media (max-width: 800px) {
+    .auth {
+        grid-template-columns: 1fr;
     }
 
-    /* Hide branding on mobile — show form only */
-    .auth-left {
-        @apply hidden;
+    .auth__brand {
+        display: none;
     }
 
-    .glass-card {
-        @apply w-full max-w-[420px];
-        padding: 2rem 2rem 1.5rem;
+    .auth__form {
+        min-height: 100vh;
+        padding: 1.5rem;
     }
 }
 </style>
