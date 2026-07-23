@@ -18,10 +18,10 @@
 
 ```bash
 docker run --rm -it postgres:16 psql \
-  -h 192.168.0.202 -p 5432 -U <user> -d yanduoerp
+  -h 192.168.0.202 -p 5432 -U <user> -d __PROJECT_NAME__
 ```
 
-看到 `yanduoerp=#` 即成功。
+看到 `__PROJECT_NAME__=#` 即成功。
 
 > PostgreSQL 用 Docker 跑時預設會監聽所有 IP，port 透過 `ports` 對外暴露，不需額外設定。
 

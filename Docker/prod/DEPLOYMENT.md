@@ -83,8 +83,8 @@ echo "你的PAT" | docker login ghcr.io -u joeyliao127 --password-stdin
 ### 4. Clone 專案
 
 ```bash
-git clone git@github.com:joeyliao127/yanduoerp.git
-cd yanduoerp
+git clone git@github.com:joeyliao127/__PROJECT_NAME__.git
+cd __PROJECT_NAME__
 ```
 
 ---
@@ -107,7 +107,7 @@ nano Docker/build/.env.prod
 | `REDIS_PASSWORD` | Redis 密碼 |
 | `JWT_SECRET` | `openssl rand -hex 32` 產生 |
 | `AUTH_SECRET` | `openssl rand -hex 32` 產生 |
-| `AUTH_ORIGIN` | 實際 domain（例如 `https://yanduoerp.example.com`）|
+| `AUTH_ORIGIN` | 實際 domain（例如 `https://__PROJECT_NAME__.example.com`）|
 
 ### 2. 產生各服務 `.env`
 
@@ -143,8 +143,8 @@ docker compose -f docker-compose-redis.yaml up -d
 Pull 最新 image：
 
 ```bash
-docker pull ghcr.io/joeyliao127/yanduoerp/springboot:latest
-docker pull ghcr.io/joeyliao127/yanduoerp/nuxt:latest
+docker pull ghcr.io/joeyliao127/__PROJECT_NAME__/springboot:latest
+docker pull ghcr.io/joeyliao127/__PROJECT_NAME__/nuxt:latest
 ```
 
 啟動所有 app 服務（nuxt / springboot / nginx 共用同一網路）：
@@ -173,8 +173,8 @@ docker ps
 
 **VM（192.168.0.206）：**
 ```bash
-docker pull ghcr.io/joeyliao127/yanduoerp/springboot:latest
-docker pull ghcr.io/joeyliao127/yanduoerp/nuxt:latest
+docker pull ghcr.io/joeyliao127/__PROJECT_NAME__/springboot:latest
+docker pull ghcr.io/joeyliao127/__PROJECT_NAME__/nuxt:latest
 
 cd Docker/build
 docker compose -f docker-compose-app.yaml up -d --force-recreate

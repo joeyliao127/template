@@ -1,7 +1,7 @@
 services:
   nuxt:
     container_name: ${PROJECT_NAME}_nuxt
-    image: ghcr.io/joeyliao127/yanduoerp/nuxt:latest
+    image: ghcr.io/joeyliao127/__PROJECT_NAME__/nuxt:latest
     ports:
       - "${FRONTEND_PORT}:3000"
     environment:

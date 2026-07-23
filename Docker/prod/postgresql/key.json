@@ -1,7 +1,7 @@
 {
   "postgres": {
     "POSTGRES_PORT": "5432",
-    "POSTGRES_DB": "yanduoerp",
+    "POSTGRES_DB": "__PROJECT_NAME__",
     "POSTGRES_USER": "",
     "POSTGRES_PASSWORD": ""
   }
