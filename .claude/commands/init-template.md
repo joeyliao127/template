@@ -11,7 +11,7 @@ argument-hint: <ProjectName> <一句專案描述>
 
 ## 執行步驟
 
-1. 在 template 專案根目錄執行下列指令（腳本會自動：從顯示名稱推導小寫 slug 並驗證、複製 template 到同層的 `../<slug>/`（排除 `.git`/`node_modules`/建置產物/`Docker/.env`/`Database/data`）、在副本中替換 `__PROJECT_DISPLAY__`/`__PROJECT_NAME__`、把 Java package `com.penguin.template` 改為 `com.penguin.<slug>` 並改主類名、更新 `pom.xml`、產生 `README.md`、建立 `Docker/.env` 並寫入新的 `JWT_SECRET`、移除副本中的 `.claude/commands` 與 template 專用檔）：
+1. 在 template 專案根目錄執行下列指令（腳本會自動：從顯示名稱推導小寫 slug 並驗證、複製 template 到同層的 `../<slug>/`（排除 `.git`/`node_modules`/建置產物/`Docker/.env`/`Database/data`）、在副本中替換 `__PROJECT_DISPLAY__`/`__PROJECT_NAME__`、把 Java package `com.penguin.template` 改為 `com.penguin.<slug>` 並改主類名、更新 `pom.xml`、產生 `README.md`、建立 `Docker/.env` 並寫入新的 `JWT_SECRET`、移除副本中的 `.claude/commands` 與 template 專用檔）。新專案內建後端測試框架（JUnit 5 ＋ MockMvc ＋ Testcontainers PostgreSQL，附 `User` 的 repository／service／controller 範例測試），測試檔隨 Java package 一起改名：
 
    ```bash
    node .claude/commands/init-template.mjs $ARGUMENTS
@@ -23,6 +23,7 @@ argument-hint: <ProjectName> <一句專案描述>
    - 原 template 未變動；新專案在 `../<slug>/`，需 `cd` 進去再操作。
    - 尚未 build／啟動；首次 `pnpm install` 會重新產生 `pnpm-lock.yaml`。
    - 可在新資料夾用 `git init` 重新建立版本控制。
+   - 跑後端測試（`cd BE/SpringBoot && ./mvnw test`）需要 Docker 開著；寫法見新專案 `CLAUDE.md` 的「測試」。
    - 本機 HTTPS 前置（首次一次性）：`startup.sh` 會自動以 mkcert 生成 SSL 憑證，但仍需使用者先 `mkcert -install`（安裝本機 CA），並在 `/etc/hosts` 加入 `127.0.0.1 <slug>.local.com`。
 
 ## 注意

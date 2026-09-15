@@ -52,6 +52,14 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- 測試用資料庫：src/test/resources/application.properties 的 jdbc:tc: 網址會自動開一個 PostgreSQL 容器，
+		     測試結束就銷毀（需要 Docker；版本由 Spring Boot BOM 管理） -->
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- JWT -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
