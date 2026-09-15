@@ -141,6 +141,7 @@ ${description || 'TODO: 補上專案描述'}
 - 認證：JWT + Spring Security
 - 資料庫：PostgreSQL（原生 JDBC，\`NamedParameterJdbcTemplate\`）
 - 快取／Session：Redis
+- 測試：JUnit 5、Spring Boot Test（MockMvc）、Testcontainers PostgreSQL
 - 開發環境：Docker Compose
 
 ## 快速開始
@@ -156,6 +157,7 @@ docker-compose -f docker-compose-app.yaml up -d
 
 - **MVVM**：禁止在 \`.vue\` 的 script 直接 fetch，一律透過 \`composables/model/\` 的 composable。
 - 後端資料存取使用原生 JDBC（非 JPA）。
+- 後端測試寫法見 \`CLAUDE.md\` 的「測試」；執行 \`cd BE/SpringBoot && ./mvnw test\`（需要 Docker 開著）。
 - 新增 entity 可用 \`.claude/skills/skill-penguin\` 的 scaffolding skill，以 \`User\` 為藍本產生後端三層 + BFF API + MVVM model。
 `
 fs.writeFileSync(path.join(root, 'README.md'), readme)
