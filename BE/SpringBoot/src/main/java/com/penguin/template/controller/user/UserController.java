@@ -15,9 +15,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.penguin.template.common.command.PageCommand;
+import com.penguin.template.common.dto.PageResponse;
 import com.penguin.template.domain.auth.AuthClaim;
 import com.penguin.template.domain.user.UserChangePasswordCommand;
 import com.penguin.template.domain.user.UserCreateCommand;
@@ -43,11 +44,10 @@ public class UserController {
         this.path = "/users";
     }
 
+    // GET /api/users?page=1&pageSize=20
     @GetMapping
-    public ResponseEntity<UserDTO> index(@RequestParam String username) {
-        UserDTO userDTOList = userService.getUserByName(username);
-        return ResponseEntity.ok(userDTOList);
-
+    public ResponseEntity<PageResponse<UserDTO>> index(PageCommand page) {
+        return ResponseEntity.ok(userService.index(page));
     }
 
     @PostMapping("/signUp")

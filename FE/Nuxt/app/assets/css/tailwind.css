@@ -1,184 +1,289 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap");
+/* ============================================================
+   Template Design System — Tailwind v4 / Nuxt UI v4 entry point
+   Pure-neutral palette: paper white surfaces, ink (#0a0a0a) as
+   the single accent, borders doing the work of shadows.
+   Source of truth: Claude Design「Template」handoff tokens.
+   ============================================================ */
+
+/* Geist has no CJK glyphs — Noto Sans TC is the zh-TW fallback */
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "@nuxt/ui";
 @plugin "@tailwindcss/typography";
 
-@theme inline {
-    /* Core palette → UButton / UBadge color props */
-    --color-primary: var(--primary);
-    --color-primary-dark: var(--primary-dark);
-    --color-secondary: var(--secondary);
-    --color-accent: var(--accent);
-    --color-alert: var(--alert);
-    --color-dialog-bg: var(--dialog-bg);
+@theme {
+    --font-sans: "Geist", "Noto Sans TC", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
-    /* Semantic text colors → text-content / text-content-dim / … */
+    /* DS true-grey ramp replaces Tailwind's neutral (950 = ink) */
+    --color-neutral-50: #fafafa;
+    --color-neutral-100: #f4f4f5;
+    --color-neutral-200: #e4e4e7;
+    --color-neutral-300: #d4d4d8;
+    --color-neutral-400: #a1a1aa;
+    --color-neutral-500: #71717a;
+    --color-neutral-600: #52525b;
+    --color-neutral-700: #3f3f46;
+    --color-neutral-800: #27272a;
+    --color-neutral-900: #18181b;
+    --color-neutral-950: #0a0a0a;
+
+    /* DS soft, low-opacity shadows — reserved for things that float */
+    --shadow-xs: 0 1px 2px rgba(9, 9, 11, 0.05);
+    --shadow-sm: 0 1px 3px rgba(9, 9, 11, 0.06), 0 1px 2px rgba(9, 9, 11, 0.04);
+    --shadow-md: 0 4px 12px rgba(9, 9, 11, 0.07), 0 2px 4px rgba(9, 9, 11, 0.04);
+    --shadow-lg: 0 12px 32px rgba(9, 9, 11, 0.09), 0 4px 8px rgba(9, 9, 11, 0.04);
+    --shadow-xl: 0 24px 56px rgba(9, 9, 11, 0.12), 0 8px 16px rgba(9, 9, 11, 0.05);
+}
+
+/* Legacy utility aliases (text-content* / bg-surface-hover) used by
+   existing components — kept so they keep compiling against DS tokens */
+@theme inline {
     --color-content: var(--text-primary);
     --color-content-dim: var(--text-secondary);
-    --color-content-muted: var(--text-body);
-    --color-content-faint: var(--text-muted);
-
-    /* Semantic surface colors → bg-surface-hover / hover:bg-surface-hover */
+    --color-content-muted: var(--text-secondary);
+    --color-content-faint: var(--text-tertiary);
     --color-surface-hover: var(--surface-hover);
-
-    --radius: var(--ui-radius);
 }
 
-/* ── Dark mode (default) ─────────────────────────────── */
-:root,
+/* ── Design tokens(語意層,元件一律引用這層,不引用色階)── */
+:root {
+    /* Neutral ramp */
+    --neutral-0: #ffffff;
+    --neutral-50: #fafafa;
+    --neutral-100: #f4f4f5;
+    --neutral-150: #ececee;
+    --neutral-200: #e4e4e7;
+    --neutral-300: #d4d4d8;
+    --neutral-400: #a1a1aa;
+    --neutral-500: #71717a;
+    --neutral-600: #52525b;
+    --neutral-700: #3f3f46;
+    --neutral-800: #27272a;
+    --neutral-900: #18181b;
+    --neutral-950: #0a0a0a;
+
+    /* Ink (primary action) */
+    --ink: #0a0a0a;
+    --ink-hover: #27272a;
+    --ink-press: #18181b;
+
+    /* Status hues (muted, state only — never decoration) */
+    --green-500: #3f8f5b;
+    --green-50: #ecf6ef;
+    --amber-500: #c2820a;
+    --amber-50: #fbf4e4;
+    --red-500: #c4453d;
+    --red-50: #fbeceb;
+    --blue-500: #3a6ea5;
+    --blue-50: #eaf1f8;
+
+    /* Surfaces */
+    --surface-page: var(--neutral-0);
+    --surface-subtle: var(--neutral-50);
+    --surface-card: var(--neutral-0);
+    --surface-sunken: var(--neutral-100);
+    --surface-inverse: var(--neutral-950);
+    --surface-hover: var(--neutral-100);
+    --surface-active: var(--neutral-150);
+
+    /* Text */
+    --text-primary: var(--neutral-950);
+    --text-secondary: var(--neutral-600);
+    --text-tertiary: var(--neutral-400);
+    --text-disabled: var(--neutral-300);
+    --text-inverse: var(--neutral-0);
+    --text-link: var(--neutral-950);
+
+    /* Borders */
+    --border-subtle: var(--neutral-200);
+    --border-default: var(--neutral-300);
+    --border-strong: var(--neutral-400);
+    --border-inverse: var(--neutral-800);
+
+    /* Action (primary = ink) */
+    --action-primary: var(--ink);
+    --action-primary-hover: var(--ink-hover);
+    --action-primary-press: var(--ink-press);
+    --action-primary-text: var(--neutral-0);
+
+    /* Focus ring:2px 墨色環 + 2px 紙白間隙 */
+    --focus-ring: var(--neutral-950);
+    --ring: 0 0 0 2px var(--surface-page), 0 0 0 4px var(--focus-ring);
+
+    /* Status text/surface pairs */
+    --status-success: var(--green-500);
+    --status-success-surface: var(--green-50);
+    --status-warning: var(--amber-500);
+    --status-warning-surface: var(--amber-50);
+    --status-danger: var(--red-500);
+    --status-danger-surface: var(--red-50);
+    --status-info: var(--blue-500);
+    --status-info-surface: var(--blue-50);
+
+    /* Type scale */
+    --text-display: clamp(2.75rem, 5.2vw, 4.5rem);
+    --text-h1: clamp(2.25rem, 4vw, 3.25rem);
+    --text-h2: 2.25rem;
+    --text-h3: 1.75rem;
+    --text-h4: 1.375rem;
+    --text-h5: 1.125rem;
+    --text-body-lg: 1.125rem;
+    --text-body: 1rem;
+    --text-body-sm: 0.875rem;
+    --text-caption: 0.8125rem;
+    --text-micro: 0.6875rem;
+
+    --leading-tight: 1.1;
+    --leading-snug: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.65;
+
+    --tracking-tighter: -0.03em;
+    --tracking-tight: -0.015em;
+    --tracking-normal: 0em;
+    --tracking-wide: 0.02em;
+    --tracking-eyebrow: 0.14em;
+
+    --weight-light: 300;
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /* Layout */
+    --container-sm: 640px;
+    --container-md: 768px;
+    --container-lg: 1024px;
+    --container-xl: 1200px;
+    --container-2xl: 1320px;
+    --gutter: clamp(1.25rem, 5vw, 4rem);
+    --section-y: clamp(4rem, 8vw, 8rem);
+
+    /* Motion */
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+    --duration-fast: 120ms;
+    --duration-base: 180ms;
+    --duration-slow: 280ms;
+
+    /* Scrollbar */
+    --scrollbar-thumb: var(--neutral-300);
+    --scrollbar-thumb-hover: var(--neutral-400);
+}
+
+/* ── Nuxt UI v4 變數映射(必須在 @import "@nuxt/ui" 之後)── */
+:root {
+    --ui-bg: var(--surface-page);
+    --ui-bg-muted: var(--surface-subtle);
+    --ui-bg-elevated: var(--surface-sunken);
+    --ui-bg-accented: var(--surface-active);
+    --ui-bg-inverted: var(--surface-inverse);
+
+    --ui-text: var(--text-primary);
+    --ui-text-highlighted: var(--text-primary);
+    --ui-text-toned: var(--text-secondary);
+    --ui-text-muted: var(--text-secondary);
+    --ui-text-dimmed: var(--text-tertiary);
+    --ui-text-inverted: var(--text-inverse);
+
+    --ui-border: var(--border-subtle);
+    --ui-border-muted: var(--border-subtle);
+    --ui-border-accented: var(--border-default);
+    --ui-border-inverted: var(--border-inverse);
+
+    --ui-primary: var(--ink);
+    --ui-secondary: var(--neutral-600);
+    --ui-success: var(--status-success);
+    --ui-warning: var(--status-warning);
+    --ui-error: var(--status-danger);
+    --ui-info: var(--status-info);
+
+    /* Nuxt UI 以倍數展開 radius 階層(sm=1x, md=1.5x, lg=2x, xl=3x),
+       基數 4px 正好得出 DS 的 4 / 6 / 8 / 12px */
+    --ui-radius: 0.25rem;
+}
+
+/* ── Dark mode ───────────────────────────────────────────
+   PENDING:等 Claude Design 產出 dark tokens 後填入。
+   在那之前 re-pin 亮色值——不能留空,否則 @nuxt/ui 內建的
+   .dark palette 會對 localStorage 殘留 dark 偏好的訪客生效。 */
 .dark {
-    /* Base palette */
-    --background: rgba(31, 34, 31, 1);
-    --primary: rgba(12, 80, 19, 1);
-    --primary-dark: rgba(7, 42, 11, 1);
-    --primary-light: rgba(74, 222, 128, 1);
-    --secondary: oklch(0.9491 0 0);
-    --accent: rgba(184, 167, 109, 1);
-    --accent-dark: rgba(184, 167, 109, 1);
-    --alert: rgba(227, 6, 6, 1);
-    --dialog-bg: rgba(54, 54, 54, 1);
+    --ui-bg: var(--surface-page);
+    --ui-bg-muted: var(--surface-subtle);
+    --ui-bg-elevated: var(--surface-sunken);
+    --ui-bg-accented: var(--surface-active);
+    --ui-bg-inverted: var(--surface-inverse);
 
-    /* Text */
-    --text-primary: rgba(241, 245, 249, 1);      /* headings */
-    --text-secondary: rgba(226, 232, 240, 0.9);  /* sub-headings, sidebar */
-    --text-body: rgba(203, 213, 225, 0.65);      /* nav items, body */
-    --text-muted: rgba(148, 163, 184, 0.35);     /* placeholders, empty states */
+    --ui-text: var(--text-primary);
+    --ui-text-highlighted: var(--text-primary);
+    --ui-text-toned: var(--text-secondary);
+    --ui-text-muted: var(--text-secondary);
+    --ui-text-dimmed: var(--text-tertiary);
+    --ui-text-inverted: var(--text-inverse);
 
-    /* Border */
-    --border-subtle: rgba(71, 85, 105, 1);
+    --ui-border: var(--border-subtle);
+    --ui-border-muted: var(--border-subtle);
+    --ui-border-accented: var(--border-default);
+    --ui-border-inverted: var(--border-inverse);
 
-    /* Surface */
-    --surface-code: rgba(51, 65, 85, 1);
-    --surface-code-bg: rgba(15, 23, 42, 1);
-    --surface-hover: rgba(255, 255, 255, 0.06);
-    --bg-overlay: rgba(0, 0, 0, 0.3);
-
-    /* Editor */
-    --editor-code: rgba(125, 211, 252, 1);
-    --editor-link: rgba(56, 189, 248, 1);
-
-    /* Auth */
-    --auth-text: rgba(248, 250, 252, 0.92);
-    --auth-text-strong: rgba(248, 250, 252, 1);
-    --auth-text-subtle: rgba(226, 232, 240, 0.7);
-    --auth-input-bg: rgba(30, 38, 60, 0.72);
-    --auth-input-border: rgba(255, 255, 255, 0.35);
-    --auth-input-border-focus: rgba(255, 255, 255, 0.7);
-    --auth-border: rgba(255, 255, 255, 0.12);
-    --auth-surface-strong: rgba(30, 38, 60, 0.72);
-    --auth-button-text: rgba(22, 24, 29, 1);
-
-    /* Shadow */
-    --shadow-dark: rgba(0, 0, 0, 0.2);
-    --shadow-base: rgba(15, 23, 42, 0.5);
-    --shadow-strong: rgba(15, 23, 42, 0.6);
-
-    /* Glass */
-    --glass-bg-subtle: rgba(31, 34, 31, 0.5);
-    --glass-bg: rgba(31, 34, 31, 0.72);
-    --glass-bg-strong: rgba(31, 34, 31, 0.88);
-    --glass-border: rgba(255, 255, 255, 0.08);
-
-    /* Scrollbar */
-    --scrollbar-thumb: oklch(0.42 0.03 260);
-    --scrollbar-thumb-hover: oklch(0.52 0.03 260);
-
-    --ui-radius: 0.3125rem;
+    --ui-primary: var(--ink);
+    --ui-secondary: var(--neutral-600);
+    --ui-success: var(--status-success);
+    --ui-warning: var(--status-warning);
+    --ui-error: var(--status-danger);
+    --ui-info: var(--status-info);
 }
 
-/* ── Light mode ──────────────────────────────────────── */
-/* 點綴：#C88395  主要：#C5DDE6  輔助/背景：#F7F5F2    */
-.light {
-    /* Base palette */
-    --background: #f7f5f2;
-    --primary: #c5dde6;
-    --primary-dark: rgba(159, 196, 209, 1);
-    --primary-light: rgba(197, 221, 230, 0.7);
-    --secondary: #f7f5f2;
-    --accent: #c88395;
-    --accent-dark: rgba(180, 108, 128, 1);
-    --alert: rgba(220, 38, 38, 1);
-    --dialog-bg: rgba(241, 239, 236, 1);
-
-    /* Text */
-    --text-primary: rgba(15, 23, 42, 1);
-    --text-secondary: rgba(30, 41, 59, 0.9);
-    --text-body: rgba(51, 65, 85, 0.75);
-    --text-muted: rgba(100, 116, 139, 0.45);
-
-    /* Border */
-    --border-subtle: rgba(148, 163, 184, 1);
-
-    /* Surface */
-    --surface-code: rgba(203, 213, 225, 1);
-    --surface-code-bg: rgba(248, 250, 252, 1);
-    --surface-hover: rgba(0, 0, 0, 0.05);
-    --bg-overlay: rgba(255, 255, 255, 0.45);
-
-    /* Editor */
-    --editor-code: rgba(6, 95, 140, 1);
-    --editor-link: rgba(2, 132, 199, 1);
-
-    /* Auth — auth page has its own dark background, keep dark */
-    --auth-text: rgba(248, 250, 252, 0.92);
-    --auth-text-strong: rgba(248, 250, 252, 1);
-    --auth-text-subtle: rgba(226, 232, 240, 0.7);
-    --auth-input-bg: rgba(30, 38, 60, 0.72);
-    --auth-input-border: rgba(255, 255, 255, 0.35);
-    --auth-input-border-focus: rgba(255, 255, 255, 0.7);
-    --auth-border: rgba(255, 255, 255, 0.12);
-    --auth-surface-strong: rgba(30, 38, 60, 0.72);
-    --auth-button-text: rgba(22, 24, 29, 1);
-
-    /* Shadow */
-    --shadow-dark: rgba(0, 0, 0, 0.08);
-    --shadow-base: rgba(0, 0, 0, 0.12);
-    --shadow-strong: rgba(0, 0, 0, 0.2);
-
-    /* Glass — based on #F7F5F2 = rgb(247, 245, 242) */
-    --glass-bg-subtle: rgba(247, 245, 242, 0.55);
-    --glass-bg: rgba(247, 245, 242, 0.78);
-    --glass-bg-strong: rgba(247, 245, 242, 0.92);
-    --glass-border: rgba(0, 0, 0, 0.1);
-
-    /* Scrollbar */
-    --scrollbar-thumb: oklch(0.68 0.04 240);
-    --scrollbar-thumb-hover: oklch(0.58 0.04 240);
-
-    --ui-radius: 0.3125rem;
-}
-
-/* ── Glass utilities ─────────────────────────────────── */
-@utility glass-subtle {
-    background: var(--glass-bg-subtle);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid var(--glass-border);
-}
-
-@utility glass {
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--glass-border);
-}
-
-@utility glass-strong {
-    background: var(--glass-bg-strong);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--glass-border);
-}
-
+/* ── Base ────────────────────────────────────────────── */
 @layer base {
-    html,
+    html {
+        -webkit-text-size-adjust: 100%;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
     body {
-        font-family: "Kanit", sans-serif;
-        background-color: var(--background);
+        font-family: var(--font-sans);
+        font-size: var(--text-body);
+        line-height: var(--leading-normal);
+        font-weight: var(--weight-regular);
+        color: var(--text-primary);
+        background-color: var(--surface-page);
+        letter-spacing: var(--tracking-normal);
+        font-feature-settings: "cv11", "ss01";
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: var(--weight-semibold);
+        line-height: var(--leading-tight);
+        letter-spacing: var(--tracking-tight);
+        color: var(--text-primary);
+        text-wrap: balance;
+    }
+
+    p {
+        text-wrap: pretty;
     }
 
     button {
         @apply cursor-pointer;
+    }
+
+    :focus-visible {
+        outline: none;
+        box-shadow: var(--ring);
+        border-radius: var(--radius-sm);
+    }
+
+    ::selection {
+        background: var(--neutral-950);
+        color: var(--neutral-0);
     }
 
     /* Scrollbar */
@@ -193,7 +298,7 @@
 
     ::-webkit-scrollbar-thumb {
         background: var(--scrollbar-thumb);
-        border-radius: 0;
+        border-radius: var(--radius-full, 999px);
     }
 
     ::-webkit-scrollbar-thumb:hover {
@@ -208,4 +313,23 @@
         scrollbar-width: thin;
         scrollbar-color: var(--scrollbar-thumb) transparent;
     }
+}
+
+/* ── DS helpers ──────────────────────────────────────── */
+/* Mono eyebrow / overline(tracked-out uppercase label) */
+@utility t-eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--text-micro);
+    font-weight: var(--weight-medium);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+}
+
+/* Centered content container */
+@utility t-container {
+    width: 100%;
+    max-width: var(--container-xl);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
 }

@@ -82,13 +82,13 @@ export default defineNuxtConfig({
 
     ui: {
         theme: {
-            colors: ['accent', 'primary', 'alert', 'secondary'],
+            colors: ['primary', 'secondary', 'success', 'info', 'warning', 'error'],
         },
     },
 
     colorMode: {
-        preference: 'dark',
-        fallback: 'dark',
+        preference: 'light',
+        fallback: 'light',
     },
 
     //icon設定

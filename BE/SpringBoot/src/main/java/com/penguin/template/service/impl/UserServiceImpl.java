@@ -8,6 +8,8 @@ import java.util.UUID;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.penguin.template.common.command.PageCommand;
+import com.penguin.template.common.dto.PageResponse;
 import com.penguin.template.domain.user.UserChangePasswordCommand;
 import com.penguin.template.domain.user.UserCreateCommand;
 import com.penguin.template.domain.user.UserDTO;
@@ -22,12 +24,37 @@ import com.penguin.template.service.UserService;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static final int DEFAULT_PAGE_SIZE = 20;
+
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public PageResponse<UserDTO> index(PageCommand page) {
+        int pageSize = (page == null || page.getPageSize() == null || page.getPageSize() <= 0)
+            ? DEFAULT_PAGE_SIZE : page.getPageSize();
+        int currentPage = (page == null || page.getPage() == null || page.getPage() <= 0)
+            ? 1 : page.getPage();
+        int offset = (currentPage - 1) * pageSize;
+
+        int count = userRepository.count();
+        List<UserDTO> items = userRepository.find(pageSize, offset)
+            .stream()
+            .map(UserDTO::fromEntity)
+            .toList();
+
+        PageResponse<UserDTO> response = new PageResponse<>();
+        response.setCount(count);
+        response.setCurrentPage(currentPage);
+        response.setPageSize(pageSize);
+        response.setTotalPage((int) Math.ceil((double) count / pageSize));
+        response.setItems(items);
+        return response;
     }
 
     @Override

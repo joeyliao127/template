@@ -1,19 +1,17 @@
 <template>
     <div>
         <UModal v-model="open" :ui="modalUi">
-            <UButton block variant="ghost" icon="i-lucide-settings-2" class="justify-start" @click="openModal">
-                {{ $t('nav.settings') }}
-            </UButton>
+            <UButton variant="ghost" color="neutral" icon="i-lucide-settings-2" :aria-label="$t('nav.settings')" @click="openModal" />
             <template #content>
                 <div
-                    class="flex w-[760px] h-[600px] rounded-xl glass-strong text-content shadow-2xl overflow-hidden"
+                    class="flex w-[760px] max-w-[calc(100vw-2rem)] h-[600px] rounded-xl bg-default ring ring-default text-default shadow-xl overflow-hidden"
                 >
-                    <div class="w-48 border-r border-[var(--glass-border)] p-3 space-y-1 bg-[var(--bg-overlay)]">
+                    <div class="w-48 border-r border-default p-3 space-y-1 bg-muted">
                         <template v-for="item in sections" :key="item.value">
                             <UButton
                                 block
                                 :variant="activeSection === item.value ? 'soft' : 'ghost'"
-                                :color="activeSection === item.value ? 'accent' : 'neutral'"
+                                :color="activeSection === item.value ? 'primary' : 'neutral'"
                                 class="justify-start"
                                 @click="changeSection(item.value)"
                             >
@@ -38,7 +36,7 @@
                             </slot>
                         </div>
 
-                        <div class="pt-4 border-t border-[var(--glass-border)] flex flex-wrap gap-2">
+                        <div class="pt-4 border-t border-default flex flex-wrap gap-2">
                             <slot name="footer" :close="closeModal" />
                         </div>
                     </div>
@@ -110,7 +108,7 @@ function closeModal() {
 }
 
 const modalUi = {
-    overlay: 'bg-black/50',
+    overlay: 'bg-[rgba(9,9,11,0.32)] backdrop-blur-[2px]',
     content: '!bg-transparent !ring-0 !shadow-none !p-0 w-fit',
 }
 </script>

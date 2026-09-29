@@ -7,7 +7,7 @@
             <p class="text-xs text-slate-400">
                 {{ $t('settings.account.deleteWarning') }}
             </p>
-            <UButton color="alert" variant="soft" :loading="deleting" @click="handleDelete">
+            <UButton color="error" variant="soft" :loading="deleting" @click="handleDelete">
                 {{ $t('settings.account.deleteConfirmBtn') }}
             </UButton>
         </div>

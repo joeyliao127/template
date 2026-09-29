@@ -44,7 +44,7 @@ async function save() {
     } catch (err: unknown) {
         const e = err as { data?: { message?: string } }
         const msg = e?.data?.message?.includes('incorrect') ? t('settings.security.wrongPassword') : t('settings.security.saveFailed')
-        toast.add({ title: msg, color: 'alert' })
+        toast.add({ title: msg, color: 'error' })
     } finally {
         saving.value = false
     }
